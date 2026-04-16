@@ -25,6 +25,7 @@ class TestGenerator(keras.utils.Sequence):
         N: int,
         data_description: DataDescription,
         for_prediction: bool,
+        **kwargs,
     ) -> None:
         """Data generator for testing purposes. A TestGenerator object can be used
         to infinitely iterate over the test data, where only the last items are
@@ -40,6 +41,8 @@ class TestGenerator(keras.utils.Sequence):
         Raises:
             Exception: If an unknown data type is passed to the TestGenerator.
         """
+        super().__init__(**kwargs)
+
         self.test_data = test_data
         self.N = N
         self.data_description = data_description
@@ -101,3 +104,7 @@ class TestGenerator(keras.utils.Sequence):
             tf.concat(test_data, 0),
             tf.concat(true_data, 0),
         )
+
+        # Keras 3 data adapter is more stable with NumPy batches from Sequence.
+        self.test_input = self.test_input.numpy()
+        self.test_true = self.test_true.numpy()

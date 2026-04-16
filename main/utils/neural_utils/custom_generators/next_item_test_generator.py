@@ -18,6 +18,7 @@ class NextItemTestGenerator(keras.utils.Sequence):
         N: int,
         batch_size: int,
         for_prediction: bool,
+        **kwargs,
     ) -> None:
         """Data generator for testing purposes. A DataGenerator object can be used
         to infinitely iterate over the testing sessions.
@@ -32,6 +33,8 @@ class NextItemTestGenerator(keras.utils.Sequence):
             batch_size (int): The batch size for training.
             for_prediction (bool): Whether the generator is for training or prediction.
         """
+        super().__init__(**kwargs)
+
         self.N = N
         self.batch_size = batch_size
         self.for_prediction = for_prediction
@@ -109,3 +112,8 @@ class NextItemTestGenerator(keras.utils.Sequence):
             self.test_true = tf.concat(
                 [self.test_true_padding, self.test_true_column], axis=-1
             )
+
+        # Keras 3 data adapter is more stable with NumPy batches from Sequence.
+        self.test_input = self.test_input.numpy()
+        if self.test_true is not None:
+            self.test_true = self.test_true.numpy()

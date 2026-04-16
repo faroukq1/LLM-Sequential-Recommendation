@@ -17,6 +17,7 @@ class NextItemTrainGenerator(keras.utils.Sequence):
         train_data: Union[pd.DataFrame, dict[int, np.ndarray]],
         N: int,
         batch_size: int,
+        **kwargs,
     ) -> None:
         """Data generator for training purposes. A TrainGenerator object can be used
         to infinitely iterate over the training data.
@@ -30,6 +31,8 @@ class NextItemTrainGenerator(keras.utils.Sequence):
             N (int): The sequence length.
             batch_size (int): The batch size for training.
         """
+        super().__init__(**kwargs)
+
         self.train_data = train_data
         self.N = N
         self.batch_size = batch_size
@@ -53,11 +56,10 @@ class NextItemTrainGenerator(keras.utils.Sequence):
         end_index = (batch_index + 1) * self.batch_size
         indices = self.indices[start_index:end_index]
 
-        result = (
-            tf.gather(self.train_input, indices),
-            tf.gather(self.train_true, indices),
+        return (
+            self.train_input[indices],
+            self.train_true[indices],
         )
-        return result
 
     def on_epoch_end(self):
         """Method called at the end of an epoch. In this case, we want to regenerate
@@ -82,6 +84,10 @@ class NextItemTrainGenerator(keras.utils.Sequence):
             TensorFactory.PADDING_TARGET,
             self.train_true,
         )
+
+        # Keras 3 data adapter is more stable with NumPy batches from Sequence.
+        self.train_input = self.train_input.numpy()
+        self.train_true = self.train_true.numpy()
 
         self.indices = np.arange(len(self.train_input))
         np.random.shuffle(self.indices)

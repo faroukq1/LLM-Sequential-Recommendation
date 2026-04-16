@@ -25,6 +25,7 @@ class TrainGenerator(keras.utils.Sequence):
         batch_size: int,
         mask_prob: float,
         data_description: DataDescription,
+        **kwargs,
     ) -> None:
         """Data generator for training purposes. A TrainGenerator object can be used
         to infinitely iterate over the training data, where some items are randomly
@@ -38,6 +39,8 @@ class TrainGenerator(keras.utils.Sequence):
             data_description (DataDescription): The description of the data, containing
                 some properties that are necessary to instantiate a TrainGenerator.
         """
+        super().__init__(**kwargs)
+
         self.train_data = train_data
         self.N = N
         self.batch_size = batch_size
@@ -59,8 +62,8 @@ class TrainGenerator(keras.utils.Sequence):
         indices = self.indices[start_index:end_index]
 
         return (
-            tf.gather(self.train_input, indices),
-            tf.gather(self.train_true, indices),
+            self.train_input[indices],
+            self.train_true[indices],
         )
 
     def on_epoch_end(self):
@@ -104,3 +107,7 @@ class TrainGenerator(keras.utils.Sequence):
             tf.concat(train_data, 0),
             tf.concat(true_data, 0),
         )
+
+        # Keras 3 data adapter is more stable with NumPy batches from Sequence.
+        self.train_input = self.train_input.numpy()
+        self.train_true = self.train_true.numpy()
