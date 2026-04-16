@@ -104,4 +104,8 @@ class TransformerModel(keras.Model):
         )
 
     def get_optimizer(self):
-        return tf.keras.optimizers.experimental.AdamW(**self.optimizer_kwargs)
+        adamw_cls = getattr(tf.keras.optimizers, "AdamW", None)
+        if adamw_cls is None:
+            adamw_cls = tf.keras.optimizers.experimental.AdamW
+
+        return adamw_cls(**self.optimizer_kwargs)

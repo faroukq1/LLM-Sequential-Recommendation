@@ -39,13 +39,13 @@ class MeanReciprocalRank(RankingMetric):
         )
 
         intersect_mask_all = np.vstack(
-            (
+            [
                 np.pad(
                     np.isin(pred, inter, assume_unique=True).astype(np.int32),
                     (0, self.top_k - len(pred)),
                 )
                 for pred, inter in zip(predictions, intersect)
-            )
+            ]
         )
 
         intersect_count = np.array([len(inter) for inter in intersect])

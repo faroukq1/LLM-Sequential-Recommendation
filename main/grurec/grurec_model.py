@@ -113,5 +113,9 @@ class GRURecModel(keras.Model):
 
     def compile_model(self):
         # Construct optimizer and compile.
-        adam_w = keras.optimizers.experimental.AdamW(**self.optimizer_kwargs)
+        adamw_cls = getattr(keras.optimizers, "AdamW", None)
+        if adamw_cls is None:
+            adamw_cls = keras.optimizers.experimental.AdamW
+
+        adam_w = adamw_cls(**self.optimizer_kwargs)
         self.compile(adam_w, loss=masked_sparse_categorical_crossentropy)
