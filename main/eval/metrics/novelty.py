@@ -28,7 +28,7 @@ class Novelty(RankingMetric):
         intersect: np.ndarray,
         sample_id: int,
     ) -> float:
-        """Compute 'novelty' metric of a sample.
+        r"""Compute 'novelty' metric of a sample.
 
         Based on the paper:
             Zhou, T., Kuscsik, Z., Liu, J. G., Medo, M., Wakeling, J. R.,

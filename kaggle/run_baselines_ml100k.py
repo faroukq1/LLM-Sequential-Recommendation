@@ -413,6 +413,18 @@ def _build_arg_parser() -> argparse.ArgumentParser:
         help="Cores used during metric computation.",
     )
     parser.add_argument(
+        "--sknn-k",
+        type=int,
+        default=200,
+        help="Neighborhood size for SKNN variants.",
+    )
+    parser.add_argument(
+        "--sknn-sample-size",
+        type=int,
+        default=1000,
+        help="Candidate neighbor sample size for SKNN variants.",
+    )
+    parser.add_argument(
         "--num-epochs",
         type=int,
         default=6,

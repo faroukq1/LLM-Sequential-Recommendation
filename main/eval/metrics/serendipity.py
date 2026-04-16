@@ -31,7 +31,7 @@ class Serendipity(RankingMetric):
         intersect: np.ndarray,
         sample_id: int,
     ) -> float:
-        """Compute 'serendipity' metric of a sample.
+        r"""Compute 'serendipity' metric of a sample.
 
         Based on the paper:
             Ge, M., Delgado-Battenfeld, C., & Jannach, D. (2010, September).
