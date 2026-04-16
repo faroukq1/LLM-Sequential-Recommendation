@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 from scipy.sparse import csr_matrix
-from tenacity import retry, stop_after_attempt, wait_random
+from tenacity import retry, stop_after_attempt, wait_random, RetryError
 from tensorflow import keras
 
 from main.abstract_model import Model
@@ -164,13 +164,39 @@ class NeuralModel(Model):
             mode="max",
             restore_best_weights=True,
         )
+        fit_callbacks = [metric_callback, early_stop, *self.active_callbacks]
+        fit_verbose = 2 if self.is_verbose else 0
+
         # Train using early stopping.
-        fit_model(
-            x=train_generator,
-            epochs=self.num_epochs,
-            callbacks=[metric_callback, early_stop, *self.active_callbacks],
-            verbose=2 if self.is_verbose else 0,
-        )
+        try:
+            fit_model(
+                x=train_generator,
+                epochs=self.num_epochs,
+                callbacks=fit_callbacks,
+                verbose=fit_verbose,
+            )
+        except RetryError as retry_error:
+            cause = retry_error.last_attempt.exception()
+            cause_text = str(cause) if cause is not None else str(retry_error)
+
+            # Keras 3 + Sequence compatibility fallback seen in some runtimes.
+            if "OptionalFromValue" not in cause_text and "Toutput_types" not in cause_text:
+                raise
+
+            logging.warning(
+                "Keras Sequence fit failed with '%s'. Falling back to in-memory NumPy arrays.",
+                cause_text,
+            )
+            train_x, train_y = self._materialize_train_sequence(train_generator)
+
+            fit_model(
+                x=train_x,
+                y=train_y,
+                batch_size=self.fit_batch_size,
+                epochs=self.num_epochs,
+                callbacks=fit_callbacks,
+                verbose=fit_verbose,
+            )
 
         self.is_trained = True
 
@@ -287,3 +313,42 @@ class NeuralModel(Model):
         data_2 = data[data["SessionId"].isin(sessions_val)]
 
         return (data_1, data_2)
+
+    @staticmethod
+    def _materialize_train_sequence(
+        train_sequence: keras.utils.Sequence,
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        """Materialize a Keras Sequence into NumPy arrays for model.fit fallback.
+
+        Args:
+            train_sequence: The Keras Sequence yielding (x_batch, y_batch).
+
+        Returns:
+            Tuple[np.ndarray, np.ndarray]: Concatenated (x, y) arrays.
+
+        Raises:
+            ValueError: If the sequence is empty or yields invalid batch tuples.
+        """
+        x_batches: list[np.ndarray] = []
+        y_batches: list[np.ndarray] = []
+
+        for batch_idx in range(len(train_sequence)):
+            batch = train_sequence[batch_idx]
+            if not isinstance(batch, tuple) or len(batch) != 2:
+                raise ValueError(
+                    "Training sequence must return a tuple of (x_batch, y_batch)."
+                )
+
+            x_batch, y_batch = batch
+            if y_batch is None:
+                raise ValueError("Training sequence returned y_batch=None.")
+
+            x_batches.append(np.asarray(x_batch))
+            y_batches.append(np.asarray(y_batch))
+
+        if len(x_batches) == 0:
+            raise ValueError("Training sequence is empty and produced no batches.")
+
+        x = np.concatenate(x_batches, axis=0)
+        y = np.concatenate(y_batches, axis=0)
+        return x, y
