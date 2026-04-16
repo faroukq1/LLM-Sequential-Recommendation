@@ -180,7 +180,7 @@ class NeuralModel(Model):
             cause_text = str(cause) if cause is not None else str(retry_error)
 
             # Keras 3 + Sequence compatibility fallback seen in some runtimes.
-            if "OptionalFromValue" not in cause_text and "Toutput_types" not in cause_text:
+            if not NeuralModel._is_optional_from_value_error(cause_text):
                 raise
 
             logging.warning(
@@ -188,15 +188,30 @@ class NeuralModel(Model):
                 cause_text,
             )
             train_x, train_y = self._materialize_train_sequence(train_generator)
+            try:
+                fit_model(
+                    x=train_x,
+                    y=train_y,
+                    batch_size=self.fit_batch_size,
+                    epochs=self.num_epochs,
+                    callbacks=fit_callbacks,
+                    verbose=fit_verbose,
+                )
+            except RetryError as retry_error_np:
+                cause_np = retry_error_np.last_attempt.exception()
+                cause_np_text = (
+                    str(cause_np) if cause_np is not None else str(retry_error_np)
+                )
 
-            fit_model(
-                x=train_x,
-                y=train_y,
-                batch_size=self.fit_batch_size,
-                epochs=self.num_epochs,
-                callbacks=fit_callbacks,
-                verbose=fit_verbose,
-            )
+                if not NeuralModel._is_optional_from_value_error(cause_np_text):
+                    raise
+
+                logging.warning(
+                    "Array-based fit also failed with '%s'. Falling back to manual"
+                    " train_on_batch loop without callbacks/early stopping.",
+                    cause_np_text,
+                )
+                self._train_on_numpy_batches(train_x, train_y)
 
         self.is_trained = True
 
@@ -352,3 +367,48 @@ class NeuralModel(Model):
         x = np.concatenate(x_batches, axis=0)
         y = np.concatenate(y_batches, axis=0)
         return x, y
+
+    @staticmethod
+    def _is_optional_from_value_error(error_text: str) -> bool:
+        return "OptionalFromValue" in error_text or "Toutput_types" in error_text
+
+    def _train_on_numpy_batches(self, train_x: np.ndarray, train_y: np.ndarray) -> None:
+        """Fallback training loop using train_on_batch.
+
+        This bypasses Keras iterator internals that can fail on some runtime
+        combinations. It intentionally skips callback-driven early stopping.
+        """
+        n_samples = len(train_x)
+        if n_samples == 0:
+            raise ValueError("Fallback training received empty arrays.")
+
+        for epoch in range(self.num_epochs):
+            indices = np.arange(n_samples)
+            np.random.shuffle(indices)
+
+            batch_losses: list[float] = []
+            for start in range(0, n_samples, self.fit_batch_size):
+                batch_idx = indices[start : start + self.fit_batch_size]
+                train_result = self.model.train_on_batch(
+                    train_x[batch_idx], train_y[batch_idx], return_dict=True
+                )
+
+                if isinstance(train_result, dict):
+                    batch_losses.append(float(train_result.get("loss", 0.0)))
+                elif isinstance(train_result, (tuple, list, np.ndarray)):
+                    batch_losses.append(float(train_result[0]))
+                else:
+                    batch_losses.append(float(train_result))
+
+            if self.is_verbose:
+                avg_loss = (
+                    float(np.mean(batch_losses))
+                    if len(batch_losses) > 0
+                    else float("nan")
+                )
+                logging.info(
+                    "Manual fallback epoch %s/%s - loss: %.6f",
+                    epoch + 1,
+                    self.num_epochs,
+                    avg_loss,
+                )
