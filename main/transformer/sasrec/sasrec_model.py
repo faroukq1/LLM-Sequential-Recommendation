@@ -42,16 +42,12 @@ class SASRecModel(TransformerModel):
         )
 
         embeddings = self.embedding_layer(inputs)
-        embeddings = self.embedding_dropout(embeddings)
+        embeddings = self.embedding_dropout(embeddings, training=training)
 
-        transformations = self.transformer(embeddings)
+        transformations = self.transformer(embeddings, training=training)
         if training:
-            # We want to produce a probability vector for all positions that
-            # do not correspond to padding.
-            relevant = tf.logical_not(padding)
-            relevant_transformations: tf.Tensor = tf.boolean_mask(
-                transformations, relevant
-            )
+            # Keep fixed shape during training and let the loss function apply masking.
+            relevant_transformations: tf.Tensor = transformations
         else:
             # During prediction/validation, we just want the last transformation to
             # predict the next-item.

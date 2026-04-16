@@ -12,7 +12,7 @@ from main.utils.neural_utils.custom_preprocessors.tensor_factory import (
 
 
 class BERTModel(TransformerModel):
-    def call(self, inputs: tf.Tensor) -> tf.Tensor:
+    def call(self, inputs: tf.Tensor, training: bool = False) -> tf.Tensor:
         """The call method defines how the input tensor is propagated through the model
         to form the output tensor.
 
@@ -30,9 +30,17 @@ class BERTModel(TransformerModel):
             inputs,
         )
         embeddings: tf.Tensor = self.embedding_layer(inputs)
-        transformations: tf.Tensor = self.transformer(embeddings)
-        relevant_transformations: tf.Tensor = tf.boolean_mask(transformations, relevant)
-        predictions: tf.Tensor = self.projection_head(relevant_transformations)
+        transformations: tf.Tensor = self.transformer(embeddings, training=training)
+
+        if training:
+            # Keep fixed shape during training and let the loss function apply masking.
+            predictions: tf.Tensor = self.projection_head(transformations)
+        else:
+            # At inference time, only masked locations represent query targets.
+            relevant_transformations: tf.Tensor = tf.boolean_mask(
+                transformations, relevant
+            )
+            predictions: tf.Tensor = self.projection_head(relevant_transformations)
         return predictions
 
     def get_transformer_layer(self):

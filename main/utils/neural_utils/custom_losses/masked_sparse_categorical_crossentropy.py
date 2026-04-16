@@ -28,8 +28,21 @@ def masked_sparse_categorical_crossentropy(y_true: tf.Tensor, y_pred: tf.Tensor)
     Returns:
         tf.Tensor: A tensor containing the cross-entropy losses.
     """
-    y_true_masked = tf.boolean_mask(
-        y_true, tf.not_equal(y_true, TensorFactory.PADDING_TARGET)
-    )
+    mask = tf.not_equal(y_true, TensorFactory.PADDING_TARGET)
+    y_true_masked = tf.boolean_mask(y_true, mask)
 
-    return K.mean(K.sparse_categorical_crossentropy(y_true_masked, y_pred))
+    # For fixed-shape training outputs, mask logits on the same positions as labels.
+    if (
+        y_pred.shape.rank is not None
+        and y_true.shape.rank is not None
+        and y_pred.shape.rank == y_true.shape.rank + 1
+    ):
+        y_pred_masked = tf.boolean_mask(y_pred, mask)
+    else:
+        y_pred_masked = y_pred
+
+    return tf.cond(
+        tf.equal(tf.size(y_true_masked), 0),
+        lambda: tf.cast(0.0, y_pred.dtype),
+        lambda: K.mean(K.sparse_categorical_crossentropy(y_true_masked, y_pred_masked)),
+    )
