@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import sys
 import tarfile
 import time
@@ -398,25 +399,80 @@ def generate_bge_m3_embeddings(
             return all_item_ids, embeddings
         logging.warning("Cached embedding shape mismatch, regenerating: %s", output_npy_path)
 
-    try:
-        from FlagEmbedding import BGEM3FlagModel
-    except ImportError as exc:
-        raise ImportError(
-            "FlagEmbedding is required. Install with: pip install -U FlagEmbedding"
-        ) from exc
-
     logging.info("Generating BGE-M3 embeddings for %d items...", len(texts))
-    model = BGEM3FlagModel("BAAI/bge-m3", use_fp16=True)
 
     chunks: list[np.ndarray] = []
-    for start in range(0, len(texts), batch_size):
-        cur = texts[start : start + batch_size]
-        out = model.encode(
-            cur,
-            batch_size=batch_size,
-            max_length=max_text_length,
-        )["dense_vecs"]
-        chunks.append(np.asarray(out, dtype=np.float32))
+
+    disable_flagembedding = os.environ.get("LLMSEQREC_DISABLE_FLAGEMBEDDING") == "1"
+
+    # Preferred path: FlagEmbedding wrapper.
+    try:
+        if disable_flagembedding:
+            raise RuntimeError("FlagEmbedding path disabled via env var.")
+
+        from FlagEmbedding import BGEM3FlagModel
+
+        model = BGEM3FlagModel("BAAI/bge-m3", use_fp16=True)
+        for start in range(0, len(texts), batch_size):
+            cur = texts[start : start + batch_size]
+            out = model.encode(
+                cur,
+                batch_size=batch_size,
+                max_length=max_text_length,
+            )["dense_vecs"]
+            chunks.append(np.asarray(out, dtype=np.float32))
+    except Exception as flag_exc:  # pragma: no cover - runtime env specific.
+        # Kaggle occasionally ships a transformers version that breaks
+        # FlagEmbedding imports. In that case we fallback to plain
+        # transformers+torch while still using BGE-M3 weights.
+        logging.warning(
+            "FlagEmbedding path failed (%s). Falling back to transformers+torch encoder.",
+            flag_exc,
+        )
+
+        try:
+            import torch
+            import torch.nn.functional as F
+            from transformers import AutoModel, AutoTokenizer
+        except Exception as tfm_exc:
+            raise ImportError(
+                "Unable to load BGE-M3 via both FlagEmbedding and transformers paths. "
+                "Install compatible deps (torch/transformers/FlagEmbedding)."
+            ) from tfm_exc
+
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        dtype = torch.float16 if device == "cuda" else torch.float32
+
+        tokenizer = AutoTokenizer.from_pretrained("BAAI/bge-m3")
+        model = AutoModel.from_pretrained("BAAI/bge-m3", torch_dtype=dtype)
+        model.to(device)
+        model.eval()
+
+        for start in range(0, len(texts), batch_size):
+            cur = texts[start : start + batch_size]
+            encoded = tokenizer(
+                cur,
+                padding=True,
+                truncation=True,
+                max_length=max_text_length,
+                return_tensors="pt",
+            )
+            encoded = {k: v.to(device) for k, v in encoded.items()}
+
+            with torch.no_grad():
+                model_out = model(**encoded)
+                token_embeddings = model_out.last_hidden_state
+                attention_mask = encoded["attention_mask"].unsqueeze(-1).expand(
+                    token_embeddings.size()
+                )
+                attention_mask = attention_mask.float()
+
+                summed = torch.sum(token_embeddings * attention_mask, dim=1)
+                counts = torch.clamp(attention_mask.sum(dim=1), min=1e-9)
+                sentence_emb = summed / counts
+                sentence_emb = F.normalize(sentence_emb, p=2, dim=1)
+
+            chunks.append(sentence_emb.detach().cpu().numpy().astype(np.float32))
 
     embeddings = np.vstack(chunks).astype(np.float32)
     np.save(output_npy_path, embeddings)
