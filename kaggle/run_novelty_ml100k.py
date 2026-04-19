@@ -440,39 +440,77 @@ def generate_bge_m3_embeddings(
                 "Install compatible deps (torch/transformers/FlagEmbedding)."
             ) from tfm_exc
 
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        dtype = torch.float16 if device == "cuda" else torch.float32
+        force_cpu_embedding = os.environ.get("LLMSEQREC_FORCE_CPU_EMBEDDING") == "1"
 
-        tokenizer = AutoTokenizer.from_pretrained("BAAI/bge-m3")
-        model = AutoModel.from_pretrained("BAAI/bge-m3", torch_dtype=dtype)
-        model.to(device)
-        model.eval()
+        def _encode_with_transformers(device: str) -> list[np.ndarray]:
+            local_dtype = torch.float16 if device == "cuda" else torch.float32
+            tokenizer = AutoTokenizer.from_pretrained("BAAI/bge-m3")
 
-        for start in range(0, len(texts), batch_size):
-            cur = texts[start : start + batch_size]
-            encoded = tokenizer(
-                cur,
-                padding=True,
-                truncation=True,
-                max_length=max_text_length,
-                return_tensors="pt",
-            )
-            encoded = {k: v.to(device) for k, v in encoded.items()}
+            try:
+                model = AutoModel.from_pretrained("BAAI/bge-m3", dtype=local_dtype)
+            except TypeError:
+                model = AutoModel.from_pretrained("BAAI/bge-m3", torch_dtype=local_dtype)
 
-            with torch.no_grad():
-                model_out = model(**encoded)
-                token_embeddings = model_out.last_hidden_state
-                attention_mask = encoded["attention_mask"].unsqueeze(-1).expand(
-                    token_embeddings.size()
+            model.to(device)
+            model.eval()
+
+            local_chunks: list[np.ndarray] = []
+            for start in range(0, len(texts), batch_size):
+                cur = texts[start : start + batch_size]
+                encoded = tokenizer(
+                    cur,
+                    padding=True,
+                    truncation=True,
+                    max_length=max_text_length,
+                    return_tensors="pt",
                 )
-                attention_mask = attention_mask.float()
+                encoded = {k: v.to(device) for k, v in encoded.items()}
 
-                summed = torch.sum(token_embeddings * attention_mask, dim=1)
-                counts = torch.clamp(attention_mask.sum(dim=1), min=1e-9)
-                sentence_emb = summed / counts
-                sentence_emb = F.normalize(sentence_emb, p=2, dim=1)
+                with torch.no_grad():
+                    model_out = model(**encoded)
+                    token_embeddings = model_out.last_hidden_state
+                    attention_mask = encoded["attention_mask"].unsqueeze(-1).expand(
+                        token_embeddings.size()
+                    )
+                    attention_mask = attention_mask.float()
 
-            chunks.append(sentence_emb.detach().cpu().numpy().astype(np.float32))
+                    summed = torch.sum(token_embeddings * attention_mask, dim=1)
+                    counts = torch.clamp(attention_mask.sum(dim=1), min=1e-9)
+                    sentence_emb = summed / counts
+                    sentence_emb = F.normalize(sentence_emb, p=2, dim=1)
+
+                local_chunks.append(sentence_emb.detach().cpu().numpy().astype(np.float32))
+
+            return local_chunks
+
+        preferred_device = "cpu" if force_cpu_embedding else (
+            "cuda" if torch.cuda.is_available() else "cpu"
+        )
+
+        try:
+            chunks.extend(_encode_with_transformers(preferred_device))
+        except Exception as device_exc:
+            error_text = str(device_exc).lower()
+            cuda_kernel_issue = (
+                "no kernel image is available" in error_text
+                or "cuda error" in error_text
+                or "cudaerrornokernelimagefordevice" in error_text
+                or "acceleratorerror" in error_text
+            )
+
+            if preferred_device != "cuda" or not cuda_kernel_issue:
+                raise
+
+            logging.warning(
+                "CUDA embedding path failed on this runtime (%s). Retrying on CPU.",
+                device_exc,
+            )
+            try:
+                torch.cuda.empty_cache()
+            except Exception:
+                pass
+
+            chunks.extend(_encode_with_transformers("cpu"))
 
     embeddings = np.vstack(chunks).astype(np.float32)
     np.save(output_npy_path, embeddings)
