@@ -15,6 +15,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import sys
 import tarfile
 import time
 import urllib.request
@@ -25,6 +26,10 @@ from typing import Any
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from main.eval.evaluation import Evaluation
 from main.eval.metrics.catalog_coverage import CatalogCoverage
