@@ -382,6 +382,30 @@ class NeuralModel(Model):
         if n_samples == 0:
             raise ValueError("Fallback training received empty arrays.")
 
+        def _extract_loss_from_train_result(train_result: Any) -> float:
+            """Normalize train_on_batch outputs across Keras/TensorFlow variants."""
+            if isinstance(train_result, dict):
+                return float(train_result.get("loss", 0.0))
+
+            # Some runtimes return an eager tensor or numpy scalar even when
+            # return_dict=True is requested.
+            if hasattr(train_result, "numpy"):
+                train_result = train_result.numpy()
+
+            if isinstance(train_result, np.ndarray):
+                if train_result.ndim == 0:
+                    return float(train_result.item())
+                if train_result.size == 0:
+                    return 0.0
+                return float(train_result.reshape(-1)[0])
+
+            if isinstance(train_result, (tuple, list)):
+                if len(train_result) == 0:
+                    return 0.0
+                return float(train_result[0])
+
+            return float(train_result)
+
         for epoch in range(self.num_epochs):
             indices = np.arange(n_samples)
             np.random.shuffle(indices)
@@ -392,13 +416,7 @@ class NeuralModel(Model):
                 train_result = self.model.train_on_batch(
                     train_x[batch_idx], train_y[batch_idx], return_dict=True
                 )
-
-                if isinstance(train_result, dict):
-                    batch_losses.append(float(train_result.get("loss", 0.0)))
-                elif isinstance(train_result, (tuple, list, np.ndarray)):
-                    batch_losses.append(float(train_result[0]))
-                else:
-                    batch_losses.append(float(train_result))
+                batch_losses.append(_extract_loss_from_train_result(train_result))
 
             if self.is_verbose:
                 avg_loss = (
