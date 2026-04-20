@@ -1,0 +1,7 @@
+BEST MODEL: ColdBridge-BGE2SASRec
+Best Alpha: nan
+Best Tau:   15.0
+NDCG@10:    0.058122 (vs baseline: 0.046117, delta: +26.03%)
+HR@10:      0.094092
+LT-HR@10:   0.094092
+ILD@10:     0.173683
