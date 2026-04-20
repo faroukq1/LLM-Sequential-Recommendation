@@ -444,6 +444,13 @@ def generate_bge_m3_embeddings(
 
         def _encode_with_transformers(device: str) -> list[np.ndarray]:
             local_dtype = torch.float16 if device == "cuda" else torch.float32
+            local_batch_size = batch_size if device == "cuda" else min(batch_size, 32)
+            if local_batch_size != batch_size:
+                logging.info(
+                    "Reducing embedding batch size from %d to %d for CPU encoding.",
+                    batch_size,
+                    local_batch_size,
+                )
             tokenizer = AutoTokenizer.from_pretrained("BAAI/bge-m3")
 
             try:
@@ -455,8 +462,8 @@ def generate_bge_m3_embeddings(
             model.eval()
 
             local_chunks: list[np.ndarray] = []
-            for start in range(0, len(texts), batch_size):
-                cur = texts[start : start + batch_size]
+            for start in range(0, len(texts), local_batch_size):
+                cur = texts[start : start + local_batch_size]
                 encoded = tokenizer(
                     cur,
                     padding=True,
