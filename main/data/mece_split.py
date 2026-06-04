@@ -175,7 +175,7 @@ class MECESplit(SplitStrategy, ABC):
         ts_length: pd.DataFrame = test_split.groupby("SessionId").size()
         # This operation might create unit sessions, which are taken out as well.
         return test_split[
-            np.in1d(test_split.SessionId, ts_length[ts_length >= 2].index)
+            np.isin(test_split.SessionId, ts_length[ts_length >= 2].index)
         ]
 
     def can_split_k_fold(self) -> bool:

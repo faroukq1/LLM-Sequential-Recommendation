@@ -1,0 +1,3438 @@
+% ============================================================
+%  PREAMBLE — compile with pdfLaTeX
+% ============================================================
+\documentclass[12pt,a4paper]{report}
+
+% ── Encoding & Language ──────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+% ── Page Layout ──────────────────────────────────────────────
+\usepackage{geometry}
+\geometry{
+  a4paper,
+  top=2.5cm,
+  bottom=2.5cm,
+  left=3cm,
+  right=2.5cm
+}
+
+% ── Typography & Spacing ─────────────────────────────────────
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{parskip}
+\usepackage{ragged2e}
+
+% ── Mathematics ──────────────────────────────────────────────
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% ── Graphics & Colors ────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{tikz}
+
+% ── Tables ───────────────────────────────────────────────────
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{adjustbox}
+
+% ── Boxes & Frames ───────────────────────────────────────────
+\usepackage{mdframed}
+
+% ── Headers & Footers ────────────────────────────────────────
+\usepackage{fancyhdr}
+
+% ── Section & Chapter Formatting ─────────────────────────────
+\usepackage{titlesec}
+\titleformat{\chapter}[block]
+  {\normalfont\Large\bfseries}{}{0em}{}
+\titlespacing*{\chapter}{0pt}{0pt}{20pt}
+
+% ── Bibliography ─────────────────────────────────────────────
+\usepackage[round,authoryear]{natbib}
+\newcommand{\textcite}[1]{\citet{#1}}
+\newcommand{\parencite}[1]{\citep{#1}}
+\bibliographystyle{plainnat}
+
+% ── Hyperlinks ───────────────────────────────────────────────
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+% ============================================================
+\begin{document}
+
+% ── FRONT MATTER (roman page numbers) ───────────────────────
+\pagestyle{empty}
+\pagenumbering{roman}
+
+% ============================================================
+%  PAGE 1 — COVER PAGE
+% ============================================================
+\begin{titlepage}
+
+% Page double border
+\begin{tikzpicture}[remember picture, overlay]
+  \draw[line width=2pt]
+    ([shift={(0.55cm,0.55cm)}]current page.south west)
+    rectangle
+    ([shift={(-0.55cm,-0.55cm)}]current page.north east);
+  \draw[line width=0.5pt]
+    ([shift={(0.7cm,0.7cm)}]current page.south west)
+    rectangle
+    ([shift={(-0.7cm,-0.7cm)}]current page.north east);
+\end{tikzpicture}
+
+% Watermark
+\begin{tikzpicture}[remember picture, overlay]
+  \node[opacity=0.07] at (current page.center)
+    {\includegraphics[width=0.68\paperwidth]{picture/logo/logo.png}};
+\end{tikzpicture}
+
+  % ── Arabic header ───────────────────────────────────────
+  \begin{center}
+    {\small\bfseries People's Democratic Republic of Algeria}\\[1pt]
+    {\small\bfseries Ministry of Higher Education and Scientific Research}
+  \end{center}
+
+  \vspace{3pt}
+  \noindent\rule{\linewidth}{0.5pt}
+  \vspace{4pt}
+
+  % ── University row ──────────────────────────────────────
+  \begin{center}
+  \begin{tabular}{p{0.34\linewidth} c p{0.34\linewidth}}
+    \raggedright
+    {\small Universit\'e Badji Mokhtar -- Annaba\\
+             Badji Mokhtar -- Annaba University} &
+    \raisebox{-0.45cm}{%
+      \includegraphics[height=1.7cm]{picture/logo/logo.png}} &
+    \raggedleft
+    {\small\bfseries Universit\'e Badji Mokhtar\\
+                     -- Annaba --}
+  \end{tabular}
+  \end{center}
+
+  \vspace{4pt}
+  \noindent\rule{\linewidth}{0.5pt}
+  \vspace{6pt}
+
+  % ── Faculty block ───────────────────────────────────────
+  \begin{flushleft}
+    {\small \textbf{Faculty:} Technology}\\[2pt]
+    {\small \textbf{Department:} Computer Science}\\[2pt]
+    {\small \textbf{Domain:} Mathematics -- Computer Science}\\[2pt]
+    {\small \textbf{Field:} Computer Science}\\[2pt]
+    {\small \textbf{Speciality:} Machine Learning \& Intelligent Systems}
+  \end{flushleft}
+
+  \vspace{0.5cm}
+
+  % ── Memoir label ────────────────────────────────────────
+  \begin{center}
+    {\large\bfseries Memoir}\\[4pt]
+    {\normalsize Presented for the award of the \textbf{Master's Degree}}
+  \end{center}
+
+  \vspace{0.25cm}
+  \begin{center}{\large\bfseries Theme}\end{center}
+  \vspace{0.25cm}
+
+  % ── Title box ───────────────────────────────────────────
+  \begin{mdframed}[
+    linecolor=black, linewidth=1pt,
+    innertopmargin=14pt, innerbottommargin=14pt,
+    innerleftmargin=18pt, innerrightmargin=18pt,
+    roundcorner=4pt
+  ]
+    \begin{center}
+      {\large\bfseries
+        Length-Adaptive Hybrid GNN-Transformer for Sequential\\[5pt]
+        Recommendation and Systematic Study of LLM Item\\[5pt]
+        Description Strategies
+      }
+    \end{center}
+  \end{mdframed}
+
+  \vspace{0.55cm}
+
+  % ── Author ──────────────────────────────────────────────
+  \begin{center}
+    \textbf{Presented by:} \quad Farouk Ouled Meriem
+  \end{center}
+
+  \vspace{0.35cm}
+
+  % ── Supervisor ──────────────────────────────────────────
+  \begin{center}
+    \begin{tabular}{lll}
+      \textbf{Supervisor:} & [Supervisor Name] \quad & [Grade] \quad Badji Mokhtar -- Annaba University
+    \end{tabular}
+  \end{center}
+
+  \vspace{0.45cm}
+
+  % ── Jury ────────────────────────────────────────────────
+  \begin{center}
+    \textbf{Defense Jury:}\\[8pt]
+    \begin{tabular}{|p{3.8cm}|p{1.5cm}|p{4.2cm}|p{2.5cm}|}
+      \hline
+      {[Jury Member 1]} & MCB & Badji Mokhtar -- Annaba University & President   \\ \hline
+      {[Supervisor]}    & MCA & Badji Mokhtar -- Annaba University & Supervisor  \\ \hline
+      {[Jury Member 2]} & MCB & Badji Mokhtar -- Annaba University & Examiner    \\ \hline
+    \end{tabular}
+  \end{center}
+
+  \vfill
+
+  \begin{center}
+    {\normalsize\bfseries University Year: 2024/2025}
+  \end{center}
+
+\end{titlepage}
+
+
+% ============================================================
+%  PAGE 2 — ACKNOWLEDGEMENTS
+% ============================================================
+\newpage
+\chapter*{Acknowledgements}
+\addcontentsline{toc}{chapter}{Acknowledgements}
+
+\vspace{1cm}
+
+First of all, I express my deepest gratitude to \textbf{Allah} for granting me
+the strength and perseverance to accomplish this work.
+
+\vspace{0.5cm}
+I sincerely thank my \textbf{parents} for their unconditional love, support,
+and sacrifices throughout my studies.
+
+\vspace{0.5cm}
+My heartfelt thanks go to my supervisor for their constant guidance,
+availability, and valuable feedback at every stage of this work.
+
+\vspace{0.5cm}
+I also extend my appreciation to the members of the jury for their time
+and careful evaluation of this memoir.
+
+\vspace{0.5cm}
+Finally, I thank all my colleagues and friends for their encouragement
+and support throughout this journey.
+
+
+% ============================================================
+%  PAGE 3 — DEDICATIONS
+% ============================================================
+\newpage
+\chapter*{Dedications}
+\addcontentsline{toc}{chapter}{Dedications}
+
+\vspace{2.5cm}
+
+\begin{center}
+  \itshape\large
+  To my parents,\\[8pt]
+  for every sacrifice they made so I could reach this day.\\[24pt]
+
+  To my family and friends,\\[8pt]
+  for their constant support and encouragement.\\[24pt]
+
+  \upshape\normalsize\textbf{Farouk Ouled Meriem}
+\end{center}
+
+
+% ============================================================
+%  TABLE OF CONTENTS, LIST OF FIGURES, LIST OF TABLES
+% ============================================================
+\newpage
+\tableofcontents
+\newpage
+\listoffigures
+\newpage
+\listoftables
+
+
+% ============================================================
+%  GENERAL INTRODUCTION (Unnumbered Chapter)
+% ============================================================
+\newpage
+\pagenumbering{arabic}  % start main matter with arabic page numbers
+
+\chapter*{General Introduction}
+\addcontentsline{toc}{chapter}{General Introduction}
+
+% ── Section 1: Context and Motivation ──────────────────────
+\section*{1. Context and Motivation}
+
+In the era of digital transformation, a massive number of users are connected
+through networks and online platforms, which have become an essential part of
+daily life. E-commerce websites enable people to buy and sell products from
+anywhere in the world, while streaming platforms provide instant access to
+movies, music, and various forms of entertainment content.
+
+Due to the rapid innovation occurring in the digital world, the amount of
+content generated online has grown tremendously. This overwhelming abundance of
+information often makes it difficult for users to make appropriate decisions or
+find content that matches their interests. Faced with such a large volume of
+available choices, users may experience information overload and confusion.
+
+To address this challenge, recommendation systems have emerged as an effective
+solution. These systems help users discover relevant products, services, or
+content by analyzing their preferences and behaviors, thereby improving user
+experience and supporting better decision-making.
+
+Recommendation systems have various categories, one of the most important being
+\textbf{sequential recommendation}, which has become a major research direction
+in recent years. Unlike traditional collaborative filtering approaches that focus
+on identifying user preferences based on similarities between groups of users,
+sequential recommendation models emphasize the temporal order of user interactions
+to predict the next item a user is likely to interact with, such as purchasing a
+product, watching a movie, or listening to music. By analyzing the sequence of
+past behaviors, these models can better capture dynamic user interests and provide
+more accurate and personalized recommendations.
+
+Recent breakthroughs in deep learning have significantly advanced the field of
+sequential recommendation. Early models based on \textbf{Recurrent Neural Networks
+(RNNs)}, such as GRU4Rec, were designed to process sequential data where the order
+of user interactions plays a crucial role. These models enabled the capture of
+short-term temporal dependencies in user behavior, marking an important step forward
+in recommendation systems.
+
+Later, the introduction of attention mechanisms and \textbf{Transformer-based
+architectures} brought a major improvement. Models such as SASRec and BERT4Rec made
+it possible to effectively model long-range dependencies within user interaction
+sequences. This greatly improved both the accuracy and scalability of sequential
+recommendation systems.
+
+At the same time, \textbf{Graph Neural Networks (GNNs)} introduced a new paradigm
+by modeling global relationships between users and items through the entire
+interaction graph. This approach enables the extraction of rich collaborative signals
+that go beyond what purely sequential models can capture, providing a more holistic
+understanding of user preferences.
+
+However, these two categories possess complementary characteristics. Graph Neural
+Networks are highly effective at capturing global co-occurrence relationships within
+the interaction graph, but they often show weaker performance in modeling the local
+and temporal dynamics specific to individual users. On the other hand, sequential
+Transformer-based models are proficient at encoding recent user preferences and
+contextual dynamics, yet they generally overlook global collaborative signals hidden
+within the interaction graph.
+
+Existing works generally rely on fixed fusion strategies that combine these two
+paradigms using static contribution weights. However, such approaches fail to
+consider an important reality: users exhibit varying levels of interaction history,
+and the contribution of each information source should adapt accordingly to the
+density of this history. Users with limited interactions should rely more heavily
+on the global collaborative signals provided by GNN-based models, whereas users
+with rich interaction histories allow Transformer-based models to better exploit
+complex sequential patterns and evolving preferences.
+
+In parallel, the rise of \textbf{Large Language Models (LLMs)} such as GPT, LLaMA,
+and BERT, pretrained on massive textual corpora, has demonstrated a remarkable
+ability to encode rich and general semantic knowledge. These models have sparked a
+technological revolution in the field of recommendation systems by enabling a deeper
+understanding of user preferences, item semantics, and contextual information.
+
+Their integration into recommendation systems has introduced new perspectives,
+particularly for addressing the cold-start problem and enriching item representations
+beyond simple identifiers. In particular, the textual embeddings generated by LLMs
+from item descriptions provide powerful semantic signals that can complement the
+representations learned by traditional recommendation models.
+
+However, a core question remains largely unexplored in the literature: how should
+an item's textual description be formulated in order to maximize the semantic quality
+of the embeddings generated by an LLM in the context of sequential recommendation?
+Indeed, different description strategies inherently encode distinct perspectives on
+the item, which may critically impact the representational quality and discriminative
+capacity of the resulting embeddings. Each formulation --- whether a simple title, a
+metadata-enriched profile, a user-centric narrative, or a hybrid combination ---
+captures a unique facet of the item and may substantially influence the relevance
+and discriminative power of the derived representations.
+
+
+% ── Section 2: Addressed Research Problems ─────────────────
+\section*{2. Addressed Research Problems}
+
+This memoir addresses two complementary research problems:
+
+\medskip
+\noindent\textbf{Research Problem 1 --- Adaptive GNN-Transformer Fusion Based on
+Interaction History Length}
+
+\medskip
+Existing hybrid approaches that combine Graph Neural Networks and Transformer-based
+architectures for sequential recommendation generally rely on static fusion
+mechanisms, where the respective contributions of the two components are fixed for
+all users. Such approaches ignore a fundamental disparity in the data: the length
+and density of user interaction histories vary significantly from one user to another.
+
+It is reasonable to assume that users with limited interaction histories should rely
+more heavily on the global collaborative signals extracted by GNNs, which leverage
+the entire interaction graph to compensate for the lack of sequential information.
+Conversely, users with long and dense interaction histories provide sufficient
+sequential patterns for Transformer-based models to effectively capture complex
+temporal dynamics and evolving preferences. Therefore, the contribution of each
+component should adapt dynamically according to the richness of the user's
+interaction history.
+
+\medskip
+\noindent\textbf{Research Problem 2 --- Impact of Item Description Strategies on
+LLM Embedding Quality in Sequential Recommendation}
+
+\medskip
+Existing approaches that integrate Large Language Models into sequential
+recommendation pipelines generally rely on a single fixed strategy for describing
+items, typically representing the item by its title or name alone. Such approaches
+overlook a fundamental question: does the way an item is described to the LLM
+influence the semantic quality of the resulting embeddings, and consequently the
+accuracy of the recommendations?
+
+Different description strategies inherently encode distinct perspectives on the item.
+A title-only description captures the most basic identity, while richer formulations
+--- such as metadata-enriched profiles, user-centric narratives, or hybrid
+combinations --- may provide the LLM with more discriminative and contextually
+relevant information. Therefore, the choice of description strategy may critically
+impact the quality and discriminative capacity of the generated embeddings.
+
+Despite its importance, this phenomenon has never been systematically studied.
+Although Boz et al. (2025) acknowledge that adding tags improves results on one
+dataset, no comprehensive comparison of description strategies across multiple
+datasets has been conducted. This gap motivates the need for a systematic
+investigation of item description strategies in LLM-based sequential recommendation.
+
+
+% ── Section 3: Main Contributions ──────────────────────────
+\section*{3. Main Contributions}
+
+This work presents two main contributions:
+
+\medskip
+\noindent\textbf{Contribution 1: Length-Adaptive Hybrid GNN-Transformer Model.}
+We propose a hybrid model that combines Graph Neural Networks and Transformer-based
+sequential encoders through an adaptive fusion mechanism. Unlike existing approaches
+that apply a uniform fusion strategy for all users, our model dynamically adjusts
+the contribution of each component based on the length of the user's interaction
+history. This allows the model to better leverage global collaborative signals for
+sparse users while exploiting complex sequential patterns for users with rich
+histories.
+
+\medskip
+\noindent\textbf{Contribution 2: Systematic Study of Item Description Strategies
+for LLM-Based Sequential Recommendation.}
+We conduct the first systematic investigation of how the formulation of item textual
+descriptions affects the quality of LLM-generated embeddings in the context of
+sequential recommendation. We compare six description strategies across three
+benchmark datasets, providing practical guidance for designing effective
+LLM-based recommendation pipelines.
+
+
+% ── Section 4: Memoir Organization ─────────────────────────
+\section*{4. Memoir Organization}
+
+The remainder of this memoir is organized as follows:
+
+\medskip
+\textbf{Chapter 1} presents the foundations and state of the art in sequential
+recommendation systems, covering classical approaches, sequence-based and
+graph-based deep learning models, the integration of Large Language Models, and
+evaluation metrics. The chapter concludes by identifying the research gaps that
+motivate our contributions.
+
+\textbf{Chapter 2} introduces our first contribution: the Length-Adaptive Hybrid
+GNN-Transformer model. We describe the limitations of existing models, formalize
+the problem, and present the proposed architecture and fusion mechanism in detail.
+
+\textbf{Chapter 3} reports the experimental evaluation of Contribution 1. We
+describe the datasets, preprocessing protocol, baselines, hyperparameter settings,
+and discuss the results including an ablation study.
+
+\textbf{Chapter 4} presents our second contribution: a systematic study of item
+description strategies for LLM-based sequential recommendation. We introduce the
+LLM2Sequential pipeline and describe the four families of description strategies
+evaluated in this work.
+
+\textbf{Chapter 5} reports the experimental evaluation of Contribution 2, including
+a comparison of all description strategies and a benchmark against the reference
+work of Boz et al. (2025).
+
+Finally, a \textbf{General Conclusion} summarizes the key findings of this work,
+discusses its limitations, and outlines promising directions for future research.
+
+
+% ============================================================
+% CHAPTER 1 — FOUNDATIONS AND STATE OF THE ART
+% ============================================================
+\chapter{Foundations and State of the Art}
+\label{ch:state-of-the-art}
+
+% ============================================================
+\section{Sequential Recommendation}
+% ============================================================
+
+\subsection{From Static to Sequential Models}
+
+The classical recommendation approaches described in the previous
+section --- collaborative filtering, content-based filtering, and
+their hybrid combinations --- treat a user's interaction history as
+an unordered set of signals. They aggregate all past interactions
+into a single static user representation, ignoring the temporal
+structure that underlies real-world behavior. In practice, however,
+user preferences are not static: a user who successively interacted
+with an action film, a thriller, and a crime drama has revealed a
+meaningful and evolving intent that a bag-of-interactions model
+cannot capture. \textcite{wang2019sequential} introduced the
+sequential recommendation paradigm to address this limitation,
+explicitly modeling the \textbf{temporal order} of user interactions
+to predict the next item a user is most likely to engage with.
+
+Sequential recommendation has become one of the most active research
+directions in the field, driven by the recognition that the order of
+interactions encodes rich signals about dynamic user preferences,
+contextual shifts, and short-term intent. Unlike traditional
+collaborative filtering, which aims to capture long-term, stable
+preferences, sequential models are designed to detect \textit{when}
+and \textit{why} a user's interest shifts, enabling finer-grained
+and more timely recommendations \parencite{wang2019sequential}.
+
+% ------------------------------------------------------------
+\subsection{Problem Formulation and Notation}
+% ------------------------------------------------------------
+
+Let $\mathcal{U} = \{u_1, u_2, \ldots, u_m\}$ denote the set of
+users and $\mathcal{I} = \{v_1, v_2, \ldots, v_n\}$ denote the set
+of items, where $m = |\mathcal{U}|$ and $n = |\mathcal{I}|$.
+For each user $u \in \mathcal{U}$, we define their \textbf{interaction
+sequence} as the chronologically ordered list of items they have
+interacted with:
+\begin{equation}
+  S_u = \left( v_1^u,\, v_2^u,\, \ldots,\, v_{T_u}^u \right),
+\end{equation}
+where $v_t^u \in \mathcal{I}$ denotes the item interacted with at
+time step $t$, and $T_u = |S_u|$ is the total length of the sequence
+for user $u$. Interactions can represent clicks, purchases, views,
+or ratings depending on the application domain.
+
+Each item $v_i \in \mathcal{I}$ is associated with a learnable
+embedding vector $\mathbf{e}_i \in \mathbb{R}^d$, where $d$ is the
+latent dimension. The full item embedding matrix is denoted
+$\mathbf{E} \in \mathbb{R}^{n \times d}$. Given the interaction
+sequence $S_u$, the corresponding sequence of item embeddings forms
+the input matrix:
+\begin{equation}
+  \mathbf{E}_u^{(t)} =
+    \left[ \mathbf{e}_{v_1^u},\, \mathbf{e}_{v_2^u},\,
+           \ldots,\, \mathbf{e}_{v_t^u} \right]
+    \in \mathbb{R}^{t \times d}.
+\end{equation}
+
+\subsection{The Next-Item Prediction Task}
+
+The central task of sequential recommendation is
+\textbf{next-item prediction}: given the subsequence of interactions
+observed up to time step $t$, denoted
+$S_u^{(t)} = (v_1^u, \ldots, v_t^u)$, the model must predict the
+item $v_{t+1}^u$ that the user will interact with at the next time
+step. As formalized by \textcite{kang2018self}, the model learns a
+scoring function $f_\theta$ parameterized by $\theta$ such that:
+\begin{equation}
+  \hat{v}_{t+1}^u = \underset{v \in \mathcal{I} \setminus S_u^{(t)}}
+                    {\arg\max} \; f_\theta\!\left(S_u^{(t)},\, v\right),
+\end{equation}
+where $\mathcal{I} \setminus S_u^{(t)}$ denotes the set of items not
+yet seen by user $u$ up to time $t$. The function $f_\theta$ maps
+the observed sequence and a candidate item to a relevance score,
+and the recommendation is the ranked list of top-$K$ items with
+the highest scores.
+
+\subsection{Training Objective}
+
+Sequential recommendation models are typically trained using a
+\textbf{next-item prediction objective} over all time steps in the
+training sequences. The most common formulation uses a
+\textbf{cross-entropy loss} over the full item vocabulary:
+\begin{equation}
+  \mathcal{L} = - \sum_{u \in \mathcal{U}} \sum_{t=1}^{T_u - 1}
+    \log P\!\left( v_{t+1}^u \;\middle|\; S_u^{(t)};\, \theta \right),
+\end{equation}
+where $P(v_{t+1}^u \mid S_u^{(t)};\, \theta)$ is the model's
+predicted probability for the ground-truth next item given the
+observed prefix sequence. An alternative is the
+\textbf{Bayesian Personalized Ranking (BPR) loss}
+\parencite{hidasi2016gru4rec}, which optimizes pairwise preferences
+between the ground-truth item and a randomly sampled negative item,
+and is preferred when full softmax over the item vocabulary is
+computationally prohibitive.
+
+\subsection{Data Splits and Evaluation Protocol}
+
+Following the standard leave-one-out evaluation protocol established
+by \textcite{kang2018self}, the interaction sequence of each user is
+split chronologically: the \textbf{last item} of the sequence is held
+out as the \textbf{test} target, the \textbf{second-to-last item} as
+the \textbf{validation} target, and all preceding items form the
+\textbf{training} sequence. This strategy ensures that the model is
+always evaluated on its ability to predict a truly unseen future
+interaction, strictly respecting the temporal ordering of the data
+\parencite{wang2019sequential}.
+
+The models reviewed in the following sections propose different
+architectures to instantiate the scoring function $f_\theta$,
+each making specific assumptions about which aspects of the
+interaction sequence are most informative --- and each exhibiting
+distinct limitations that our contributions address.
+
+% ============================================================
+\section{RNN-Based Sequential Models: GRU4Rec}
+% ============================================================
+
+\subsection{Motivation and Core Idea}
+
+Prior to the introduction of neural sequence models, session-based
+recommendation relied primarily on memory-based approaches such as
+item-to-item similarity, which model only the most recent interaction
+and fail to capture the cumulative context of an entire session.
+\textcite{hidasi2016gru4rec} addressed this limitation by proposing
+\textbf{GRU4Rec}, the first model to apply Gated Recurrent Units
+(GRUs) to the recommendation domain. The central idea is to treat
+the user's interaction history as a time-ordered sequence and process
+it recurrently, allowing the model to maintain a hidden state that
+accumulates contextual information across all past interactions in
+the session.
+
+\subsection{Architecture}
+
+GRU4Rec processes the sequence of interacted items through one or
+more stacked GRU layers \parencite{hidasi2016gru4rec}. At each time
+step $t$, the item $v_t$ is mapped to its embedding vector
+$\mathbf{e}_t \in \mathbb{R}^d$, which serves as the input to the
+recurrent layer. The GRU updates its hidden state $\mathbf{h}_t$
+according to the standard gating mechanism:
+\begin{equation}
+  \mathbf{h}_t = (1 - \mathbf{z}_t) \odot \mathbf{h}_{t-1}
+               + \mathbf{z}_t \odot \tilde{\mathbf{h}}_t,
+\end{equation}
+where $\mathbf{z}_t$ is the \textit{update gate} that controls how
+much of the previous hidden state is retained, $\tilde{\mathbf{h}}_t$
+is the candidate hidden state computed from the current input and the
+reset gate, and $\odot$ denotes element-wise multiplication. The
+hidden state $\mathbf{h}_t$ at the final time step encodes the
+cumulative sequential context of the session and is used to score
+all candidate items via a dot product with their embeddings.
+
+A key contribution of \textcite{hidasi2016gru4rec} is the design of
+a \textbf{session-parallel mini-batch} training strategy, which
+simultaneously processes multiple user sessions to fully exploit GPU
+parallelism. The model is trained with a ranking loss --- either
+cross-entropy or Bayesian Personalized Ranking (BPR) --- specifically
+adapted to optimize top-$K$ recommendation quality rather than
+generic next-token prediction accuracy.
+
+\subsection{Limitations}
+
+Despite its pioneering contribution, GRU4Rec suffers from a
+fundamental constraint inherited from all recurrent architectures:
+the \textbf{vanishing gradient problem}. As the sequence grows
+longer, gradients propagated back through time diminish
+exponentially, making it increasingly difficult for the model to
+learn dependencies between items that are far apart in the
+interaction history \parencite{hidasi2016gru4rec}. Consequently,
+GRU4Rec is effective at capturing short-term, local patterns within
+a session but struggles to model long-range dependencies that span
+many interactions. Furthermore, the strictly sequential left-to-right
+processing prevents the model from attending selectively to the most
+relevant past interactions, and the absence of any graph-based
+component means that global collaborative signals --- relationships
+between items derived from the full user-item interaction graph ---
+are entirely ignored. These limitations directly motivate the
+attention-based and graph-enhanced approaches reviewed in the
+following sections.
+
+% ============================================================
+\section{CNN-Based Sequential Models: Caser}
+% ============================================================
+
+\subsection{Motivation and Core Idea}
+
+While GRU4Rec demonstrated the value of modeling sequential order
+through recurrent processing, it captures patterns at the
+\textit{point level} --- each prediction depends primarily on the
+single most recent hidden state. \textcite{tang2018caser} identified
+a complementary type of pattern that recurrent models fundamentally
+miss: \textbf{union-level sequential patterns}, where the
+\textit{combination} of several recent items jointly predicts the
+next interaction, rather than any single item in isolation. To
+capture these patterns, \textcite{tang2018caser} proposed
+\textbf{Caser} (Convolutional Sequence Embedding Recommendation
+Model), which reframes the sequential recommendation problem as a
+2D image recognition task.
+
+\subsection{Architecture}
+
+The core idea of Caser is to embed the $L$ most recently interacted
+items into a 2D matrix --- an ``image'' in the time and latent
+spaces --- and apply convolutional filters to extract local sequential
+patterns \parencite{tang2018caser}. Formally, given the $L$ most
+recent items in user $u$'s interaction history, their embeddings are
+stacked row-wise to form the input matrix
+$\mathbf{E}^{(L)} \in \mathbb{R}^{L \times d}$,
+where each row $\mathbf{e}_{v_t}$ corresponds to the embedding of
+the item at position $t$.
+
+Two types of convolutional filters are then applied over this matrix:
+\begin{itemize}
+  \item \textbf{Horizontal filters} of shape $h \times d$ (with
+        $h \in \{1, 2, \ldots, L\}$) slide across consecutive rows
+        and capture \textit{union-level} patterns spanning $h$ recent
+        interactions.
+  \item \textbf{Vertical filters} of shape $L \times 1$ slide across
+        each latent dimension column independently and capture
+        \textit{point-level} patterns across all $L$ positions.
+\end{itemize}
+
+The outputs of all convolutional filters are concatenated and merged
+with a \textbf{user embedding} $\mathbf{p}_u \in \mathbb{R}^d$,
+which encodes the user's long-term general preferences independently
+of the recent sequence. The combined representation is passed through
+a fully connected layer followed by a softmax to produce the ranking
+scores over all candidate items \parencite{tang2018caser}.
+
+\subsection{Limitations}
+
+Despite its ability to capture union-level patterns that elude
+recurrent models, Caser's design imposes a \textbf{fixed receptive
+field}: only the $L$ most recent interactions are encoded in the
+input matrix, and all interactions beyond this window are entirely
+discarded \parencite{tang2018caser}. This hard truncation makes the
+model structurally incapable of capturing long-range dependencies
+that span more than $L$ steps. The choice of $L$ is a critical
+hyperparameter --- a small $L$ limits the model's contextual horizon,
+while a large $L$ increases computational cost and introduces noise
+from older, potentially irrelevant interactions. Moreover, like
+GRU4Rec, Caser operates exclusively on the local interaction
+sequence of each user and contains no mechanism to incorporate
+global collaborative signals from the broader user-item interaction
+graph, leaving a significant source of information unexploited.
+These limitations motivate the transition toward attention-based
+architectures capable of selectively attending to any position in
+the full interaction history.
+
+% ============================================================
+\section{Transformer-Based Sequential Models: SASRec}
+% ============================================================
+
+\subsection{Motivation and Core Idea}
+
+Both GRU4Rec and Caser suffer from a shared structural limitation:
+they either process sequences strictly left-to-right with a fixed
+hidden state (RNN), or apply convolution over a fixed-size window
+(CNN), making it impossible to selectively focus on the most
+relevant items across the \textit{entire} interaction history.
+\textcite{kang2018self} proposed \textbf{SASRec} (Self-Attentive
+Sequential Recommendation) to overcome this limitation by applying
+the \textbf{self-attention mechanism} --- the core building block of
+the Transformer architecture --- directly to sequential
+recommendation. The key insight is that at each time step, the model
+should be able to attend to any subset of past interactions, weighting
+them according to their relevance to the current prediction, rather
+than relying on a fixed recurrence or a local convolutional window.
+
+\subsection{Architecture}
+
+SASRec operates on the sequence of the $n$ most recent items in the
+user's history \parencite{kang2018self}. Each item $v_t$ is
+represented by a learnable embedding $\mathbf{e}_t \in \mathbb{R}^d$,
+to which a \textbf{learnable positional embedding} $\mathbf{p}_t
+\in \mathbb{R}^d$ is added to preserve the temporal ordering of the
+sequence:
+\begin{equation}
+  \hat{\mathbf{e}}_t = \mathbf{e}_t + \mathbf{p}_t.
+\end{equation}
+
+The resulting sequence of embeddings is passed through a stack of
+$B$ identical \textbf{self-attention blocks}. Within each block, the
+scaled dot-product attention mechanism computes, for each position
+$t$, a weighted sum over all preceding positions:
+\begin{equation}
+  \text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) =
+    \text{softmax}\!\left(
+      \frac{\mathbf{Q}\mathbf{K}^\top}{\sqrt{d}}
+      + \mathbf{M}
+    \right)\mathbf{V},
+\end{equation}
+where $\mathbf{Q}$, $\mathbf{K}$, and $\mathbf{V}$ are the query,
+key, and value matrices derived by linear projections of the input,
+$d$ is the embedding dimension, and $\mathbf{M}$ is a
+\textbf{causal mask} that sets future positions to $-\infty$ before
+the softmax, ensuring that the prediction at position $t$ can only
+attend to items at positions $1, \ldots, t-1$
+\parencite{kang2018self}. A point-wise feed-forward network and
+layer normalization are applied after each attention block. The final
+hidden representation at the last position is used to rank all
+candidate items via a dot product with their embeddings.
+
+\subsection{Limitations}
+
+SASRec represents a major advance over RNN and CNN-based models by
+enabling long-range, selective attention across the full interaction
+history. However, it presents two notable limitations. First, the
+\textbf{unidirectional causal mask} restricts each position to
+attending only to past items, which prevents the model from
+leveraging bidirectional context that could further enrich item
+representations --- a gap later addressed by BERT4Rec
+\parencite{sun2019bert4rec}. Second, and more critically for our
+work, SASRec processes each user's interaction sequence
+\textbf{in complete isolation}: it has no access to the global
+user-item interaction graph, and therefore cannot exploit the rich
+collaborative signals that emerge from the co-interaction patterns
+of all users across the entire dataset \parencite{kang2018self}.
+Two users who have interacted with many of the same items receive
+no shared signal within the SASRec framework, as item embeddings
+are learned solely from individual sequences. This absence of global
+collaborative information directly motivates the integration of
+Graph Neural Networks into sequential recommendation pipelines,
+as reviewed in Section~\ref{sec:lightgcn}.
+
+
+% ============================================================
+\section{Bidirectional Transformer Models: BERT4Rec}
+% ============================================================
+
+\subsection{Motivation and Core Idea}
+
+SASRec demonstrated that self-attention is highly effective for
+sequential recommendation, yet its \textbf{unidirectional causal
+architecture} processes each position by attending only to past
+items. \textcite{sun2019bert4rec} argued that this left-to-right
+constraint artificially limits the representational power of item
+embeddings within the sequence: in practice, the context
+surrounding an item --- both before \textit{and} after it ---
+can be informative for learning richer representations.
+Inspired by the success of BERT in natural language processing,
+\textcite{sun2019bert4rec} proposed \textbf{BERT4Rec}, which
+applies \textbf{deep bidirectional self-attention} to model user
+interaction sequences, allowing every item to attend to all other
+items in the sequence regardless of their position.
+
+\subsection{Architecture}
+
+BERT4Rec adopts the same multi-layer bidirectional Transformer
+encoder architecture as BERT \parencite{sun2019bert4rec}. The
+interaction sequence of length $n$ is embedded into a matrix, to
+which learnable positional embeddings are added. The model then
+applies $L$ stacked bidirectional self-attention blocks, where
+each position can attend to \textit{all} other positions in the
+sequence --- both left and right context --- without any causal
+mask.
+
+The key challenge of training a bidirectional model for
+recommendation is \textbf{information leakage}: if the model can
+see all positions simultaneously, predicting the next item becomes
+trivial. \textcite{sun2019bert4rec} addressed this by introducing
+a \textbf{Cloze task} (also known as Masked Language Modeling)
+adapted for recommendation. During training, a random fraction
+$\rho$ of items in the sequence are replaced by a special
+\texttt{[MASK]} token, and the model is trained to predict the
+original items at the masked positions by conditioning jointly on
+both left and right context:
+\begin{equation}
+  \mathcal{L}_{\text{Cloze}} =
+    -\sum_{v_m \in S_{\text{masked}}}
+      \log P\!\left( v_m = v_m^* \;\middle|\; \tilde{S}_u \right),
+\end{equation}
+where $S_{\text{masked}}$ is the set of masked positions,
+$v_m^*$ is the true item at masked position $m$, and
+$\tilde{S}_u$ is the corrupted sequence with masked tokens
+\parencite{sun2019bert4rec}. This formulation generates multiple
+training samples per sequence (one per masked position), producing
+a richer training signal than the single next-item prediction
+objective of SASRec. At inference time, the last item of the
+sequence is replaced by \texttt{[MASK]}, and the model's output
+at that position is used to rank all candidate items.
+
+\subsection{Limitations}
+
+BERT4Rec consistently outperforms SASRec and earlier sequential
+models on standard benchmarks, yet it introduces two notable
+limitations. First, the \textbf{train-test discrepancy}: the model
+is trained to predict masked items at arbitrary positions, but is
+evaluated exclusively on the last position, creating a mismatch
+between the training objective and the inference task
+\parencite{sun2019bert4rec}. Second, and most critically for this
+work, BERT4Rec --- like all models reviewed so far --- processes
+each user's sequence \textbf{in complete isolation} from the rest
+of the dataset. It has no mechanism to leverage the global
+structure of the user-item interaction graph, and therefore cannot
+exploit the collaborative signals that emerge from the collective
+behavior of all users. Item representations are learned purely
+from individual interaction sequences, with no awareness of which
+items are frequently co-interacted with across the population.
+This fundamental gap motivates the graph-based approach reviewed
+in the following section.
+
+% ============================================================
+\section{Graph Neural Network Models: LightGCN}
+\label{sec:lightgcn}
+% ============================================================
+
+\subsection{Motivation and Core Idea}
+
+The sequential models reviewed so far --- GRU4Rec, Caser, SASRec,
+and BERT4Rec --- all share a common blind spot: they model each
+user's interaction history in isolation, with no access to the
+global structure of the user-item interaction graph. This means
+they cannot exploit \textbf{high-order collaborative signals} ---
+the rich patterns that emerge when items are co-interacted with by
+many users across the entire dataset. Graph Convolution Network
+(GCN)-based approaches address this limitation by propagating
+information across the interaction graph. However, \textcite{he2020lightgcn}
+demonstrated through systematic ablation experiments that the two
+most common operations in standard GCNs --- \textbf{feature
+transformation} and \textbf{nonlinear activation} --- contribute
+negligibly to recommendation performance and even harm it by
+increasing training difficulty. They proposed \textbf{LightGCN},
+which strips the GCN to its single essential operation ---
+\textbf{neighborhood aggregation} --- and achieves approximately
+16\% relative improvement over the prior state-of-the-art NGCF
+under identical experimental conditions \parencite{he2020lightgcn}.
+
+\subsection{Architecture}
+
+LightGCN constructs a bipartite user-item interaction graph
+$\mathcal{G} = (\mathcal{U} \cup \mathcal{I},\, \mathcal{E})$,
+where each edge $(u, i) \in \mathcal{E}$ indicates that user $u$
+has interacted with item $i$ \parencite{he2020lightgcn}. Starting
+from learnable initial embeddings $\mathbf{e}_u^{(0)}$ and
+$\mathbf{e}_i^{(0)}$, LightGCN performs $K$ rounds of
+\textbf{linear neighborhood aggregation}. At each layer $k$, the
+embedding of a node is updated as the normalized weighted sum of
+its neighbors' embeddings from the previous layer:
+\begin{equation}
+  \mathbf{e}_u^{(k)} =
+    \sum_{i \in \mathcal{N}_u}
+      \frac{1}{\sqrt{|\mathcal{N}_u|}\sqrt{|\mathcal{N}_i|}}
+      \mathbf{e}_i^{(k-1)},
+  \qquad
+  \mathbf{e}_i^{(k)} =
+    \sum_{u \in \mathcal{N}_i}
+      \frac{1}{\sqrt{|\mathcal{N}_i|}\sqrt{|\mathcal{N}_u|}}
+      \mathbf{e}_u^{(k-1)},
+\end{equation}
+where $\mathcal{N}_u$ and $\mathcal{N}_i$ denote the sets of
+items interacted with by user $u$ and users who interacted with
+item $i$, respectively. There are \textbf{no weight matrices} and
+\textbf{no activation functions} --- the propagation is purely
+linear \parencite{he2020lightgcn}.
+
+The final user and item embeddings are computed as the
+\textbf{layer-combination} of all $K$ propagation layers:
+\begin{equation}
+  \mathbf{e}_u = \sum_{k=0}^{K} \alpha_k\, \mathbf{e}_u^{(k)},
+  \qquad
+  \mathbf{e}_i = \sum_{k=0}^{K} \alpha_k\, \mathbf{e}_i^{(k)},
+\end{equation}
+where $\alpha_k = \frac{1}{K+1}$ is a uniform layer weight.
+This multi-layer combination captures embeddings that encode
+increasingly high-order neighborhood structure: layer 1 captures
+direct neighbors, layer 2 captures two-hop neighbors, and so on.
+The predicted relevance score for a user-item pair is then computed
+as the inner product $\hat{r}_{ui} = \mathbf{e}_u^\top \mathbf{e}_i$,
+and the model is trained with the BPR loss over observed and
+sampled negative interactions \parencite{he2020lightgcn}.
+
+\subsection{Limitations}
+
+Despite its effectiveness at capturing global collaborative signals
+through graph propagation, LightGCN has a fundamental limitation
+from the perspective of sequential recommendation: it is entirely
+\textbf{order-agnostic}. The bipartite interaction graph contains
+no temporal information --- all historical interactions are treated
+as equally weighted, static evidence, regardless of when they
+occurred \parencite{he2020lightgcn}. LightGCN cannot distinguish
+a user who watched a film last year from one who watched it
+yesterday, nor can it detect any drift in user preferences over
+time. As a result, it fails to capture the dynamic, short-term
+intent that is central to the sequential recommendation task.
+This complementarity --- sequential models capturing temporal
+dynamics but lacking global signals, and LightGCN capturing global
+signals but lacking temporal dynamics --- is precisely the gap that
+the hybrid architecture proposed in this work seeks to bridge.
+
+% ============================================================
+\section{Large Language Models for Sequential Recommendation}
+% ============================================================
+
+\subsection{From ID-Based to Semantic Item Representations}
+
+All models reviewed in the previous sections --- GRU4Rec, Caser,
+SASRec, BERT4Rec, and LightGCN --- represent items as
+\textbf{anonymous learnable ID embeddings}: each item is assigned
+a randomly initialized vector that is optimized purely from the
+observed interaction data. While effective when sufficient
+interaction history is available, this paradigm has a fundamental
+limitation: it treats items as opaque identifiers with no intrinsic
+meaning, discarding the rich semantic content embedded in item
+attributes such as titles, genres, descriptions, and metadata.
+This makes such models particularly vulnerable to the
+\textbf{cold-start problem}, where items with few or no interactions
+have poorly learned embeddings regardless of how descriptive their
+content is.
+
+The emergence of \textbf{Large Language Models (LLMs)} --- deep
+neural networks pretrained on massive textual corpora via
+self-supervised objectives --- has introduced a fundamentally
+different source of item representations. Models such as GPT,
+LLaMA, and BERT encode rich semantic and world knowledge acquired
+during pretraining, enabling them to produce high-quality
+embeddings from textual item descriptions even in the complete
+absence of interaction data \parencite{wu2023survey}.
+
+\subsection{The LLM2Sequential Framework}
+
+\textcite{boz2025improving} conducted a comprehensive empirical
+study of three orthogonal strategies for integrating LLMs into
+sequential recommendation pipelines, evaluated across three
+datasets and multiple baseline models. Their most impactful
+approach, which they call \textbf{LLM2Sequential}, consists of
+replacing the randomly initialized item embedding matrix of an
+existing sequential model with embeddings pre-computed by an LLM
+from item textual descriptions. These LLM-generated embeddings
+are obtained by passing each item's description through a
+pretrained language model and extracting the resulting dense
+representation. The embedding matrix is then used to initialize
+--- and optionally fine-tune --- the item embeddings of models
+such as BERT4Rec or SASRec.
+
+\textcite{boz2025improving} demonstrate that this simple
+initialization strategy yields substantial performance gains:
+initializing BERT4Rec with LLM embeddings improves NDCG by
+15--20\% compared to the standard randomly initialized BERT4Rec
+on their benchmark datasets. These results establish that
+\textbf{semantic item embeddings from LLMs are highly
+complementary to the sequential modeling capabilities of
+Transformer-based architectures}, providing a strong initialization
+that accelerates convergence and enriches item representations
+with content-level signals.
+
+\subsection{The Open Question: Description Strategy}
+
+Despite the strong results reported by \textcite{boz2025improving},
+their study leaves a critical question unaddressed: \textbf{how
+should an item be described to the LLM in order to maximize the
+quality of the resulting embedding?} In their experiments, items
+are described primarily by their title, with one dataset including
+additional tags. No systematic comparison of different description
+strategies is conducted across datasets.
+
+This gap is significant because the textual input provided to the
+LLM fundamentally determines what semantic information is encoded
+in the resulting embedding. A title-only description captures
+the most basic item identity, while richer formulations --- such
+as metadata-enriched profiles combining genre, director, cast and
+synopsis, or user-centric narratives summarizing community
+preferences --- may provide the LLM with substantially more
+discriminative information. \textcite{boz2025improving} themselves
+acknowledge that ``adding tags improves results on one dataset'',
+implicitly suggesting that description richness matters, yet no
+principled investigation is provided.
+
+This unresolved question directly motivates the second contribution
+of this work: a \textbf{systematic study of item description
+strategies} for LLM-based sequential recommendation, presented in
+Chapter~4.
+
+% ============================================================
+\section{Evaluation Metrics}
+% ============================================================
+
+The performance of sequential recommendation models is evaluated
+using ranking metrics that measure how well the ground-truth next
+item is ranked among all candidate items. Following the standard
+evaluation protocol established in the literature
+\parencite{kang2018self}, we report three complementary metrics
+at cutoff $K$: \textbf{Hit Rate (HR@K)}, \textbf{Normalized
+Discounted Cumulative Gain (NDCG@K)}, and \textbf{Mean Reciprocal
+Rank (MRR@K)}. These three metrics are computed over the top-$K$
+ranked list returned by the model for each test user, where the
+ground truth is the single held-out last item from the user's
+sequence.
+
+\subsection{Hit Rate at K (HR@K)}
+
+Hit Rate at $K$ (HR@$K$), also referred to as Recall@$K$ in the
+next-item prediction setting, measures the fraction of test users
+for whom the ground-truth item appears anywhere within the top-$K$
+recommended list \parencite{kang2018self}. Formally:
+\begin{equation}
+  \text{HR@}K = \frac{1}{|\mathcal{U}|}
+    \sum_{u \in \mathcal{U}}
+    \mathbf{1}\!\left[ \text{rank}(v_{T_u+1}^u) \leq K \right],
+\end{equation}
+where $v_{T_u+1}^u$ is the ground-truth next item for user $u$,
+$\text{rank}(\cdot)$ denotes its position in the ranked list
+returned by the model, and $\mathbf{1}[\cdot]$ is the indicator
+function. HR@$K$ takes values in $[0, 1]$, where 1 indicates
+that the correct item is in the top-$K$ list for every user.
+It is a binary metric --- it rewards any correct recommendation
+within the top-$K$ regardless of its exact position --- making
+it a measure of \textit{coverage} rather than \textit{ranking
+quality}.
+
+\subsection{Normalized Discounted Cumulative Gain (NDCG@K)}
+
+NDCG@$K$ is a position-sensitive metric that penalizes correct
+recommendations placed lower in the ranked list. It assigns a
+higher reward to models that rank the ground-truth item as close
+to position 1 as possible \parencite{wang2019sequential}. The
+Discounted Cumulative Gain at $K$ for a single user is:
+\begin{equation}
+  \text{DCG@}K =
+    \frac{1}{\log_2(\text{rank}(v_{T_u+1}^u) + 1)}
+    \cdot \mathbf{1}\!\left[ \text{rank}(v_{T_u+1}^u) \leq K \right],
+\end{equation}
+and the normalized version is obtained by dividing by the Ideal
+DCG (IDCG), which equals $1 / \log_2(2) = 1$ in the single
+ground-truth item setting. The metric averaged over all users is:
+\begin{equation}
+  \text{NDCG@}K = \frac{1}{|\mathcal{U}|}
+    \sum_{u \in \mathcal{U}}
+    \frac{1}{\log_2\!\left(\text{rank}(v_{T_u+1}^u) + 1\right)}
+    \cdot \mathbf{1}\!\left[ \text{rank}(v_{T_u+1}^u) \leq K \right].
+\end{equation}
+NDCG@$K$ is the most widely used metric in sequential
+recommendation research, as it simultaneously captures both
+whether the correct item is retrieved and how highly it is ranked.
+
+\subsection{Mean Reciprocal Rank (MRR@K)}
+
+Mean Reciprocal Rank at $K$ (MRR@$K$) measures the average of
+the reciprocal ranks of the ground-truth item across all test
+users \parencite{hidasi2016gru4rec}. Formally:
+\begin{equation}
+  \text{MRR@}K = \frac{1}{|\mathcal{U}|}
+    \sum_{u \in \mathcal{U}}
+    \frac{1}{\text{rank}(v_{T_u+1}^u)}
+    \cdot \mathbf{1}\!\left[ \text{rank}(v_{T_u+1}^u) \leq K \right].
+\end{equation}
+MRR gives the highest reward when the correct item is ranked first
+(reciprocal rank $= 1$) and rapidly decreasing rewards for lower
+positions. It is particularly sensitive to the quality of the
+top-1 prediction and complements NDCG by emphasizing the
+\textit{precision} of the highest-ranked recommendation.
+
+\subsection{Summary and Relation to This Work}
+
+\begin{table}[h]
+\centering
+\caption{Properties of the three evaluation metrics used in this work}
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Property} & \textbf{HR@K} & \textbf{NDCG@K} & \textbf{MRR@K} \\
+\midrule
+Position-sensitive        & $\times$ & \checkmark & \checkmark \\
+Binary (hit/miss)         & \checkmark & $\times$ & $\times$ \\
+Rewards rank 1 strongly   & $\times$ & Partial & \checkmark \\
+Standard in literature    & \checkmark & \checkmark & \checkmark \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In this work, all models are evaluated using HR@10, NDCG@10, and
+MRR@10, following the standard cutoff value $K = 10$ adopted in
+the sequential recommendation literature
+\parencite{kang2018self, sun2019bert4rec}. The three metrics
+together provide a comprehensive picture of model performance:
+HR@10 measures coverage, NDCG@10 measures ranking quality, and
+MRR@10 measures top-1 precision.
+
+% ============================================================
+\section{Research Gaps and Contributions}
+% ============================================================
+
+\subsection{Synthesis of Limitations}
+
+The preceding sections have reviewed the five baseline models that
+form the foundation of this work: GRU4Rec, Caser, SASRec, BERT4Rec,
+and LightGCN. While each model represents a significant advance in
+its respective paradigm, a systematic analysis reveals two
+persistent gaps that none of them address.
+
+\begin{table}[ht]
+\centering
+\caption{Limitations of baseline sequential recommendation models}
+\renewcommand{\arraystretch}{1.3}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{} X c c c c @{}}
+\toprule
+\textbf{Model} & \textbf{Long-range} & \textbf{Global graph} &
+\textbf{Adaptive fusion} & \textbf{Semantic items} \\
+\midrule
+GRU4Rec \parencite{hidasi2016gru4rec}
+  & $\times$ & $\times$ & $\times$ & $\times$ \\
+Caser \parencite{tang2018caser}
+  & $\times$ & $\times$ & $\times$ & $\times$ \\
+SASRec \parencite{kang2018self}
+  & \checkmark & $\times$ & $\times$ & $\times$ \\
+BERT4Rec \parencite{sun2019bert4rec}
+  & \checkmark & $\times$ & $\times$ & $\times$ \\
+LightGCN \parencite{he2020lightgcn}
+  & $\times$ & \checkmark & $\times$ & $\times$ \\
+\midrule
+\textbf{This work}
+  & \checkmark & \checkmark & \checkmark & \checkmark \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Gap 1 — Static Fusion of Sequential and Graph Signals}
+
+GRU4Rec and Caser cannot capture long-range dependencies due to
+their architectural constraints --- vanishing gradients and fixed
+convolutional windows respectively. SASRec and BERT4Rec overcome
+this limitation through self-attention, but they process each
+user's interaction history in complete isolation from the rest of
+the dataset, with no access to the global collaborative signals
+encoded in the user-item interaction graph. LightGCN, conversely,
+captures these global signals effectively through graph
+propagation, but ignores the temporal order of interactions
+entirely, treating all historical interactions as equally weighted
+static evidence.
+
+Existing hybrid approaches that combine sequential and graph-based
+components \parencite{he2020lightgcn, kang2018self} address this
+complementarity, but rely on \textbf{static fusion strategies}:
+the contribution of each component is fixed uniformly for all
+users. This ignores a fundamental disparity in the data --- user
+interaction histories vary significantly in length and density.
+Users with sparse histories have insufficient sequential signal
+for Transformer-based models to operate reliably, and should
+benefit more from the global collaborative signal provided by
+the graph component. Conversely, users with long and rich
+histories provide sufficient sequential patterns for the
+Transformer to capture complex temporal dynamics, reducing their
+dependence on the graph.
+
+\noindent\textbf{Gap 1:} \textit{No existing model dynamically
+adapts the contribution of global graph signals versus local
+sequential signals based on the richness of the user's
+interaction history.}
+
+\subsection{Gap 2 — No Systematic Study of LLM Description Strategies}
+
+\textcite{boz2025improving} demonstrated that initializing
+sequential models with LLM-generated item embeddings yields
+substantial performance gains over ID-based representations.
+However, their study uses a single fixed description strategy
+--- primarily item titles --- and does not systematically
+investigate whether the \textit{formulation} of the textual
+description provided to the LLM affects the quality of the
+resulting embeddings. They acknowledge in their results that
+adding tags improves performance on one dataset, implicitly
+suggesting that description richness matters, yet provide
+no principled analysis.
+
+This gap is significant: the textual input to the LLM is the
+sole determinant of what semantic information is encoded in
+the embedding. Different formulations --- a bare title, a
+metadata-enriched profile, a user-centric narrative, or a
+structured hybrid --- capture fundamentally different facets
+of the item and may produce embeddings of substantially
+different discriminative quality for the recommendation task.
+
+\noindent\textbf{Gap 2:} \textit{No systematic study has
+compared the impact of different item description strategies
+on LLM embedding quality in the context of sequential
+recommendation.}
+
+\subsection{Contributions of This Work}
+
+The two gaps identified above directly motivate the two
+contributions of this memoir:
+
+\medskip
+\noindent\textbf{Contribution 1 --- Length-Adaptive Hybrid
+GNN-Transformer Model.}
+We propose a hybrid sequential recommendation model that
+combines a LightGCN-based graph encoder and a BERT4Rec-based
+Transformer encoder through a \textbf{length-adaptive fusion
+mechanism}. Unlike static fusion, our model computes a
+user-specific fusion weight $\alpha(u) \in [0, 1]$ as a
+monotonically increasing function of the user's interaction
+history length $T_u$, dynamically shifting the balance from
+graph-dominated representations for sparse users toward
+sequence-dominated representations for dense users. This
+contribution is presented in Chapter~2 and evaluated in
+Chapter~3.
+
+\medskip
+\noindent\textbf{Contribution 2 --- Systematic Study of Item
+Description Strategies for LLM-Based Sequential Recommendation.}
+We conduct the first systematic investigation of how the
+formulation of item textual descriptions affects the quality
+of LLM-generated embeddings in the LLM2Sequential framework
+of \textcite{boz2025improving}. We design and compare six
+description strategies across three benchmark datasets, using
+BERT4Rec as the downstream sequential model, and provide
+quantitative and qualitative guidance for practitioners
+designing LLM-augmented recommendation pipelines. This
+contribution is presented in Chapter~4 and evaluated in
+Chapter~5.
+
+
+
+% ============================================================
+\chapter{Proposed Methodology: Length-Adaptive Hybrid GNN-Transformer}
+\addcontentsline{toc}{chapter}{Chapter 2 — Proposed Methodology}
+% ============================================================
+
+\section{Introduction and Motivation}
+
+The state of the art reviewed in Chapter~1 reveals a fundamental
+tension at the heart of sequential recommendation research. On one
+side, Transformer-based models such as SASRec and BERT4Rec excel at
+capturing fine-grained temporal dynamics within individual user
+interaction sequences, but they process each user's history in
+complete isolation from the rest of the dataset, ignoring the global
+co-occurrence structure that connects items across all users. On the
+other side, graph-based models such as LightGCN capture precisely
+these global collaborative signals through neighborhood propagation
+over the user-item interaction graph, but they treat all historical
+interactions as an unordered, time-invariant set, entirely discarding
+the sequential dynamics that drive next-item prediction.
+
+Hybrid approaches that combine graph and sequential encoders have
+been proposed to bridge this gap \parencite{he2020lightgcn,
+kang2018self}. However, as identified in Section~1.10, these
+approaches suffer from a critical design flaw: they apply a
+\textbf{fixed fusion weight} uniformly to all users, regardless
+of how much sequential evidence is available for each individual.
+This assumption is fundamentally incorrect. The relative reliability
+of graph signals versus sequence signals is not constant --- it
+varies dramatically with the length of the user's interaction
+history. A user with only three recorded interactions provides
+insufficient sequential context for self-attention to generalize
+reliably; assigning such a user the same fusion weight as a user
+with two hundred interactions wastes the compensatory power of the
+global graph signal precisely where it is most needed
+\parencite{ouledmeriem2025hybrid}.
+
+This observation motivates a principled, user-aware fusion
+strategy. Users with \textbf{short interaction histories} should
+rely more heavily on the GNN's global co-occurrence signal, which
+aggregates information across the full user population and is
+independent of sequence length. Users with \textbf{long interaction
+histories} provide sufficient sequential evidence for the
+Transformer to exploit complex temporal patterns and evolving
+preferences, reducing their dependence on the graph component.
+The transition between these two regimes should be explicitly
+encoded in the model's design rather than left to a single
+globally learned scalar \parencite{ouledmeriem2025hybrid}.
+
+This chapter presents \textbf{Contribution 1} of this memoir: the
+\textbf{Length-Adaptive Hybrid GNN-Transformer}, a family of four
+hybrid architectures that share BERT4Rec as the sequential backbone
+and differ in how the complementary signal is constructed and fused.
+The unifying insight across all four variants is that GNN signals
+rescue sparse and cold-start users where sequential evidence is
+insufficient, while the Transformer dominates for active users
+with rich interaction histories. The chapter is organized as
+follows: Section~2.2 formalizes the problem, Section~2.3 describes
+the BERT4Rec backbone, Section~2.4 presents the item co-occurrence
+graph and GCN encoder, Section~2.5 introduces the four hybrid
+variants in detail, and Sections~2.6--2.7 cover the training
+objective and implementation details.
+
+
+% ============================================================
+\section{Problem Formulation}
+% ============================================================
+
+\subsection{Basic Notation}
+
+Let $\mathcal{U} = \{u_1, u_2, \ldots, u_m\}$ and
+$\mathcal{I} = \{i_1, i_2, \ldots, i_n\}$ denote the sets of
+users and items respectively, where $m = |\mathcal{U}|$ and
+$n = |\mathcal{I}|$. For each user $u \in \mathcal{U}$, let
+\begin{equation}
+  S_u = [i_1, i_2, \ldots, i_L]
+\end{equation}
+denote their interaction history of length $L = T_u$, where each
+$i_t \in \mathcal{I}$ is the item consumed at time step $t$,
+ordered chronologically. Each item $i \in \mathcal{I}$ is
+associated with a learnable embedding $\mathbf{e}_i \in \mathbb{R}^d$,
+stored in the embedding matrix $\mathbf{E} \in \mathbb{R}^{n \times d}$,
+where $d$ is the latent dimension.
+
+\subsection{Next-Item Prediction Task}
+
+The task of sequential recommendation is defined as follows:
+given the prefix sequence $S_u^{(t)} = [i_1, \ldots, i_t]$
+observed up to time step $t$, learn a scoring function
+\begin{equation}
+  f_\Theta\!\left(u,\, S_u^{(t)},\, j\right) \in \mathbb{R}
+\end{equation}
+that assigns a relevance score to each candidate item
+$j \in \mathcal{I}$, where $\Theta$ denotes all trainable
+parameters \parencite{ouledmeriem2025hybrid}. At inference time,
+items are ranked by their scores and the top-$K$ list is returned.
+Performance is evaluated via HR@$K$, NDCG@$K$, and MRR@$K$,
+as defined in Section~1.9.
+
+\subsection{The Adaptive Fusion Problem}
+
+Standard sequential recommendation models learn $f_\Theta$ from
+the interaction sequence alone, producing a single user
+representation $\mathbf{h}_u \in \mathbb{R}^d$ per user. Hybrid
+models augment this with a complementary graph-based signal
+$\mathbf{g}'_i \in \mathbb{R}^d$ per item, and combine both
+through a fusion weight $\alpha \in [0,1]$:
+\begin{equation}
+  \mathbf{h}_i^{(u)} = \alpha\, \mathbf{e}_i
+                     + (1 - \alpha)\, \mathbf{g}'_i.
+\end{equation}
+
+Existing hybrid approaches fix $\alpha$ as a single global scalar
+shared across all users \parencite{ouledmeriem2025hybrid}. The
+central problem addressed in this chapter is to replace this
+static assignment with a \textbf{user-specific fusion weight}
+$\alpha(u) \in [0,1]$ that adapts to the length $L(u)$ of each
+user's interaction history:
+\begin{equation}
+  \mathbf{h}_i^{(u)} = \alpha(u)\, \mathbf{e}_i
+                     + \bigl(1 - \alpha(u)\bigr)\, \mathbf{g}'_i,
+\end{equation}
+where $\alpha(u)$ is a monotonically non-decreasing function of
+$L(u)$ --- assigning more weight to the sequential embedding
+$\mathbf{e}_i$ as interaction history grows, and more weight to
+the graph embedding $\mathbf{g}'_i$ as history shrinks.
+
+\subsection{User History Length Groups}
+
+Following \textcite{ouledmeriem2025hybrid}, we partition users
+into three groups based on interaction history length, defined
+by two thresholds $L^*_{\text{short}} = 10$ and
+$L^*_{\text{long}} = 30$:
+
+\begin{equation}
+  \alpha(u) =
+  \begin{cases}
+    \alpha_{\text{short}} & \text{if } L(u) \leq 10 \\
+    \alpha_{\text{mid}}   & \text{if } 10 < L(u) \leq 30 \\
+    \alpha_{\text{long}}  & \text{if } L(u) > 30
+  \end{cases}
+\end{equation}
+
+The rationale for each bin is grounded in the complementary
+strengths of the two encoders:
+
+\begin{itemize}
+  \item \textbf{Short-history users} ($L(u) \leq 10$): self-attention
+        lacks sufficient context to generalize reliably from fewer
+        than 10 interactions. Assigning a small $\alpha_{\text{short}}$
+        places greater weight on the GNN's global co-occurrence signal,
+        which aggregates evidence across the full user population
+        independently of sequence length.
+
+  \item \textbf{Medium-history users} ($10 < L(u) \leq 30$): both
+        signals are partially informative. A balanced
+        $\alpha_{\text{mid}}$ allows the model to exploit both
+        graph-level structure and emerging sequential patterns.
+
+  \item \textbf{Long-history users} ($L(u) > 30$): sufficient
+        sequential evidence is available for the Transformer to
+        capture complex temporal dynamics. Assigning a large
+        $\alpha_{\text{long}}$ preserves the full expressive power
+        of the BERT4Rec sequence embedding.
+\end{itemize}
+
+The three values $(\alpha_{\text{short}}, \alpha_{\text{mid}},
+\alpha_{\text{long}})$ are treated as hyperparameters tuned on
+the validation set. In our experiments, the optimal values found
+are $\alpha_{\text{short}} = 0.3$, $\alpha_{\text{mid}} = 0.5$,
+and $\alpha_{\text{long}} = 0.7$ \parencite{ouledmeriem2025hybrid}.
+This mechanism requires no additional trainable parameters beyond
+these three scalars and adds negligible computational overhead.
+
+
+% ============================================================
+\section{BERT4Rec Backbone}
+% ============================================================
+
+\subsection{Overview}
+
+All four hybrid variants proposed in this work share
+\textbf{BERT4Rec} \parencite{sun2019bert4rec} as their sequential
+encoder. BERT4Rec adapts the masked language modeling objective
+of BERT to the recommendation setting, applying deep bidirectional
+self-attention to model the full context of a user's interaction
+sequence. It was selected as the backbone for three reasons: it
+consistently achieves the strongest performance among purely
+sequential baselines on the MovieLens benchmarks used in this
+work \parencite{ouledmeriem2025hybrid}; its bidirectional attention
+allows every item in the sequence to attend to all other items,
+producing richer contextual representations than unidirectional
+models such as SASRec; and its modular architecture makes it
+straightforward to inject auxiliary graph-based signals at the
+embedding level before the Transformer blocks process the sequence.
+
+\subsection{Input Representation}
+
+Each item $i \in \mathcal{I}$ is assigned a learnable embedding
+$\mathbf{e}_i \in \mathbb{R}^d$, stored in the embedding matrix
+$\mathbf{E} \in \mathbb{R}^{|\mathcal{I}| \times d}$. For a
+sequence of length $L$, a set of learnable positional embeddings
+$\mathbf{P} \in \mathbb{R}^{L \times d}$ is added element-wise to
+encode the temporal ordering of the interactions. The input
+representation at position $t$ is:
+\begin{equation}
+  \mathbf{H}_t^{(0)} = \mathbf{e}_{i_t} + \mathbf{p}_t,
+  \quad t = 1, \ldots, L,
+\end{equation}
+where $\mathbf{p}_t \in \mathbb{R}^d$ is the positional embedding
+at position $t$ \parencite{ouledmeriem2025hybrid}. The full input
+matrix $\mathbf{H}^{(0)} \in \mathbb{R}^{L \times d}$ is then
+passed through $B$ stacked Transformer blocks.
+
+\subsection{Self-Attention Blocks}
+
+Each of the $B$ Transformer blocks applies \textbf{multi-head
+self-attention} followed by a position-wise feed-forward network,
+residual connections, and layer normalization
+\parencite{vaswani2017attention}. Within each block $\ell$, the
+query, key, and value matrices are obtained by linear projections
+of the input from the previous block:
+\begin{equation}
+  \mathbf{Q} = \mathbf{H}^{(\ell-1)} \mathbf{W}^Q, \quad
+  \mathbf{K} = \mathbf{H}^{(\ell-1)} \mathbf{W}^K, \quad
+  \mathbf{V} = \mathbf{H}^{(\ell-1)} \mathbf{W}^V,
+\end{equation}
+where $\mathbf{W}^Q, \mathbf{W}^K, \mathbf{W}^V \in
+\mathbb{R}^{d \times d_k}$ are learnable projection matrices and
+$d_k$ is the key dimension. The scaled dot-product attention is
+then computed as:
+\begin{equation}
+  \text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}) =
+    \text{softmax}\!\left(
+      \frac{\mathbf{Q} \mathbf{K}^\top}{\sqrt{d_k}}
+    \right) \mathbf{V}.
+\end{equation}
+
+Unlike SASRec, which applies a causal mask to enforce
+left-to-right processing, BERT4Rec uses \textbf{full bidirectional
+attention}: every position can attend to all other positions in
+the sequence simultaneously, producing richer contextual item
+representations \parencite{sun2019bert4rec}. After $B$ blocks,
+the final hidden representation at the last position is taken as
+the \textbf{sequence embedding}:
+\begin{equation}
+  \mathbf{h}_u = \mathbf{H}_L^{(B)} \in \mathbb{R}^d.
+\end{equation}
+
+\subsection{Item Scoring and Cloze Training}
+
+The relevance score for a candidate item $j$ given user $u$ is
+computed as the inner product between the sequence embedding and
+the item embedding:
+\begin{equation}
+  s_{uj} = \mathbf{h}_u^\top \mathbf{e}_j.
+\end{equation}
+
+During training, BERT4Rec applies a \textbf{Cloze task}: a random
+fraction $\rho$ of items in the input sequence are replaced by a
+special \texttt{[MASK]} token, and the model is trained to
+predict the original items at the masked positions by attending
+jointly to both left and right context \parencite{sun2019bert4rec}.
+This produces multiple training samples per sequence and generates
+a richer training signal than the single next-item prediction
+objective of SASRec. At inference time, the last item in the
+sequence is masked and the model's output at that position is
+used to rank all candidate items.
+
+\subsection{Why BERT4Rec as the Backbone}
+
+The choice of BERT4Rec over SASRec as the shared backbone is
+motivated by three empirical observations from our experiments
+\parencite{ouledmeriem2025hybrid}. First, BERT4Rec achieves
+higher HR@10, NDCG@10, and MRR@10 than SASRec on both ML-100K
+and ML-1M under identical training conditions. Second, the
+bidirectional attention mechanism produces richer item-level
+contextual representations that are better suited to receive
+injected graph signals at the embedding level. Third, the
+masked training objective naturally accommodates the modified
+embedding table produced by the fusion layer, since the model
+must reconstruct masked items from a globally enriched
+representation rather than relying on raw ID embeddings alone.
+
+% ============================================================
+\section{Item Co-occurrence Graph and GCN Encoder}
+% ============================================================
+
+\subsection{Motivation}
+
+The BERT4Rec backbone described in Section~2.3 encodes each user's
+interaction history independently, with no access to the structural
+relationships between items that emerge from the collective behavior
+of all users. Two items that are frequently co-interacted with
+across the entire user population share a strong implicit
+relationship that purely sequential models cannot detect. To capture
+these \textbf{global structural signals}, we construct an
+\textbf{item co-occurrence graph} from all training sequences and
+encode it with a Graph Convolutional Network (GCN)
+\parencite{kipf2017gcn}, producing graph-enhanced item embeddings
+that complement the sequential representations of BERT4Rec.
+
+\subsection{Graph Construction}
+
+Given the set of all training interaction sequences
+$\{S_u\}_{u \in \mathcal{U}}$, we construct an undirected weighted
+item co-occurrence graph $\mathcal{G} = (\mathcal{I}, \mathcal{E})$,
+where nodes are items and edges encode co-occurrence frequency
+\parencite{ouledmeriem2025hybrid}. For each user sequence $S_u$,
+a sliding window of size $w$ is applied over the sequence. For
+every window, an undirected edge is created between each pair of
+co-occurring items $(a, b)$ and their co-occurrence count $c_{ab}$
+is incremented by one. After aggregating over all user sequences,
+edge weights are defined as:
+\begin{equation}
+  w_{ab} =
+  \begin{cases}
+    c_{ab} & \text{if } c_{ab} \geq \tau \\
+    0      & \text{otherwise,}
+  \end{cases}
+\end{equation}
+where $\tau$ is a minimum co-occurrence threshold that prunes
+rare and noisy edges. In our experiments, we use a window size
+$w = 5$ and a threshold $\tau = 2$
+\parencite{ouledmeriem2025hybrid}. Self-loops are added to every
+node to ensure each item retains its own embedding during
+propagation.
+
+\subsection{Normalized Adjacency Matrix}
+
+Let $\tilde{\mathbf{W}}$ denote the adjacency matrix of
+$\mathcal{G}$ with self-loops, and let $\tilde{\mathbf{D}}$ be
+the corresponding degree matrix with diagonal entries
+$\tilde{D}_{ii} = \sum_j \tilde{W}_{ij}$. The
+\textbf{symmetric normalized adjacency matrix} is computed as
+\parencite{kipf2017gcn}:
+\begin{equation}
+  \hat{\mathbf{A}} = \tilde{\mathbf{D}}^{-1/2}\,
+                     \tilde{\mathbf{W}}\,
+                     \tilde{\mathbf{D}}^{-1/2}.
+\end{equation}
+This normalization prevents numerical instabilities during
+propagation and ensures that items with many co-occurrence
+connections do not dominate the aggregation. The resulting
+$\hat{\mathbf{A}} \in \mathbb{R}^{|\mathcal{I}| \times |\mathcal{I}|}$
+is sparse and symmetric.
+
+\subsection{GCN Encoder}
+
+Starting from the initial item embedding matrix
+$\mathbf{E}^{(0)} = \mathbf{E} \in \mathbb{R}^{|\mathcal{I}| \times d}$,
+we apply $L_{\text{GNN}}$ graph convolutional layers. At each
+layer $\ell$, the item embeddings are updated by aggregating
+the embeddings of neighboring items in the co-occurrence graph,
+followed by a learnable linear transformation and a non-linear
+activation:
+\begin{equation}
+  \mathbf{E}^{(\ell)} = \sigma\!\left(
+    \hat{\mathbf{A}}\, \mathbf{E}^{(\ell-1)}\, \mathbf{W}^{(\ell)}
+  \right), \quad \ell = 1, \ldots, L_{\text{GNN}},
+\end{equation}
+where $\mathbf{W}^{(\ell)} \in \mathbb{R}^{d \times d}$ is a
+trainable weight matrix and $\sigma$ is the ReLU activation
+function \parencite{ouledmeriem2025hybrid}. Each GCN layer
+expands the receptive field of each item by one hop: after
+$L_{\text{GNN}}$ layers, each item's embedding encodes
+information from all items within $L_{\text{GNN}}$ hops in
+the co-occurrence graph. In our experiments, we use
+$L_{\text{GNN}} = 2$ layers, capturing up to two-hop
+co-occurrence relationships.
+
+The output of the final GCN layer,
+$\mathbf{G} = \mathbf{E}^{(L_{\text{GNN}})} \in
+\mathbb{R}^{|\mathcal{I}| \times d}$, provides
+\textbf{graph-enhanced item embeddings}
+$\mathbf{g}_i \in \mathbb{R}^d$ for each item $i$, encoding
+the structural context of that item within the global
+co-occurrence graph.
+
+\subsection{Projection to BERT4Rec Embedding Space}
+
+Since the GCN encoder and the BERT4Rec backbone may operate in
+different embedding subspaces, a \textbf{linear projection layer}
+is applied to map the graph-enhanced embeddings into the same
+space as the BERT4Rec item embeddings
+\parencite{ouledmeriem2025hybrid}:
+\begin{equation}
+  \mathbf{g}'_i = \mathbf{W}_g\, \mathbf{g}_i + \mathbf{b}_g,
+\end{equation}
+where $\mathbf{W}_g \in \mathbb{R}^{d \times d}$ and
+$\mathbf{b}_g \in \mathbb{R}^d$ are learnable parameters. The
+projected embeddings $\mathbf{g}'_i \in \mathbb{R}^d$ are then
+ready to be fused with the BERT4Rec item embeddings through the
+fusion mechanism described in Section~2.5. When the GCN and
+BERT4Rec operate in the same embedding dimension $d$ --- as in
+our experiments --- this projection still serves as a learned
+alignment that calibrates the two embedding spaces before fusion.
+
+\begin{table}[h]
+\centering
+\caption{GCN encoder hyperparameters}
+\small
+\begin{tabular}{lc}
+\toprule
+\textbf{Hyperparameter} & \textbf{Value} \\
+\midrule
+GCN layers $L_{\text{GNN}}$         & 2 \\
+Co-occurrence window size $w$        & 5 \\
+Min co-occurrence threshold $\tau$   & 2 \\
+Embedding dimension $d$              & 64 \\
+Activation function                  & ReLU \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{The Four Hybrid Model Variants}
+% ============================================================
+
+All four variants proposed in this work share the same high-level
+pipeline: the sequence path encodes $S_u$ via BERT4Rec producing
+the sequence embedding $\mathbf{h}_u$; the auxiliary path produces
+a complementary item-level signal; and the Fusion Layer blends
+both into a unified item embedding $\mathbf{h}_i^{(u)}$ before the
+final scoring step. The four variants differ exclusively in how
+the auxiliary signal is constructed and how $\alpha(u)$ is
+determined \parencite{ouledmeriem2025hybrid}.
+
+% ------------------------------------------------------------
+\subsection{Variant 1 — HybridFixed}
+% ------------------------------------------------------------
+
+\textbf{HybridFixed} is the simplest variant and serves as the
+primary ablation reference within the hybrid family. It uses the
+GCN graph embedding $\mathbf{g}'_i$ from Section~2.4 as the
+auxiliary signal, and fuses it with the BERT4Rec item embedding
+using a \textbf{single global fusion weight} $\alpha \in [0,1]$
+shared identically across all users \parencite{ouledmeriem2025hybrid}.
+For each item $i$, the fused embedding is:
+\begin{equation}
+  \mathbf{h}_i^{(u)} = \alpha\, \mathbf{e}_i
+                      + (1 - \alpha)\, \mathbf{g}'_i,
+\end{equation}
+where $\alpha$ is a learnable scalar optimized end-to-end via
+gradient descent alongside all other model parameters. This
+allows $\alpha$ to converge to the globally optimal
+GNN-Transformer trade-off for the full training distribution.
+
+The purpose of HybridFixed is twofold: it verifies that combining
+GNN and BERT4Rec embeddings is beneficial, and it serves as a
+strong upper-bound reference that isolates the contribution of
+the adaptive fusion mechanism. Despite its simplicity, HybridFixed
+achieves the strongest \textit{aggregate} performance in our
+experiments, improving HR@10 by $+8.1\%$, NDCG@10 by $+11.5\%$,
+and MRR@10 by $+14.2\%$ over BERT4Rec on ML-1M
+\parencite{ouledmeriem2025hybrid}.
+
+% ------------------------------------------------------------
+\subsection{Variant 2 — HybridDiscrete (Length-Adaptive)}
+% ------------------------------------------------------------
+
+\textbf{HybridDiscrete} is the core length-adaptive contribution
+of this work. Rather than applying a single global $\alpha$ to
+all users, it explicitly encodes the inductive bias that the
+optimal fusion weight depends on the richness of each user's
+interaction history \parencite{ouledmeriem2025hybrid}. Using the
+same GCN auxiliary signal $\mathbf{g}'_i$ as HybridFixed, the
+model assigns a \textbf{user-specific fusion weight} $\alpha(u)$
+according to the three-bin partition defined in Section~2.2:
+\begin{equation}
+  \alpha(u) =
+  \begin{cases}
+    \alpha_{\text{short}} = 0.3 & \text{if } L(u) \leq 10 \\
+    \alpha_{\text{mid}}   = 0.5 & \text{if } 10 < L(u) \leq 30 \\
+    \alpha_{\text{long}}  = 0.7 & \text{if } L(u) > 30,
+  \end{cases}
+\end{equation}
+and the fused item embedding is:
+\begin{equation}
+  \mathbf{h}_i^{(u)} = \alpha(u)\, \mathbf{e}_i
+    + \bigl(1 - \alpha(u)\bigr)\, \mathbf{g}'_i.
+\end{equation}
+
+\textbf{Rationale.} A small $\alpha(u) = 0.3$ for short-history
+users places $70\%$ of the weight on the GNN graph signal,
+compensating for the insufficient sequential context available
+to the Transformer. A balanced $\alpha(u) = 0.5$ for medium-history
+users allows equal contribution from both signals. A large
+$\alpha(u) = 0.7$ for long-history users preserves the full
+expressiveness of the BERT4Rec sequence embedding. The three
+$\alpha$ values are treated as hyperparameters tuned on the
+validation set. This mechanism adds only three scalar parameters
+and introduces negligible computational overhead
+\parencite{ouledmeriem2025hybrid}.
+
+\textbf{Why HybridDiscrete underperforms HybridFixed in aggregate.}
+Although HybridDiscrete delivers the largest targeted gains for
+short-history users, HybridFixed achieves stronger aggregate
+metrics. This is explained by three factors: first, the
+HybridFixed $\alpha$ is gradient-trained end-to-end and converges
+to the globally optimal trade-off, while the discrete $\alpha$
+values receive no gradient signal during training; second, the
+discrete binning introduces hard boundary discontinuities between
+users with $L(u) = 10$ and $L(u) = 11$, who receive sharply
+different fusion weights despite nearly identical sequential
+evidence; third, the Transformer in HybridFixed sees a single
+globally consistent embedding space across all users, whereas
+in HybridDiscrete it sees three distinct embedding spaces
+depending on the user's bin \parencite{ouledmeriem2025hybrid}.
+These limitations motivate a future direction of replacing the
+discrete bins with a fully differentiable MLP that produces a
+continuous, gradient-trained $\alpha(u)$.
+
+% ------------------------------------------------------------
+\subsection{Variant 3 — DCH-BERT4Rec}
+% ------------------------------------------------------------
+
+\textbf{DCH-BERT4Rec} (Dilated Convolutional Hybrid) replaces
+the GCN graph encoder with a \textbf{dilated causal convolutional
+network} \parencite{bai2018tcn} that encodes local sequential
+transition patterns at multiple temporal scales. Rather than
+building a global co-occurrence graph, this variant stacks
+convolutional layers with kernel size $k$ and exponentially
+increasing dilation rates:
+\begin{equation}
+  d_\ell = 2^\ell, \quad \ell = 1, 2, \ldots,
+\end{equation}
+producing a multi-scale receptive field that grows exponentially
+with depth while maintaining causal (left-to-right) processing.
+The convolutional output $\mathbf{c}_i \in \mathbb{R}^d$ captures
+short-to-medium range co-occurrence patterns and is fused with
+the BERT4Rec sequence embedding using the same fixed-weight
+scheme as HybridFixed:
+\begin{equation}
+  \mathbf{h}_i^{(u)} = \alpha\, \mathbf{e}_i^{\text{BERT}}
+                      + (1 - \alpha)\, \mathbf{c}_i.
+\end{equation}
+
+DCH-BERT4Rec tests whether \textit{local} convolutional transition
+features provide complementary information to the \textit{global}
+self-attention of BERT4Rec, without relying on a pre-built item
+graph. Empirically, DCH-BERT4Rec achieves the strongest overall
+results on ML-100K, improving HR@10 by $+25.8\%$ over BERT4Rec,
+suggesting that dilated convolutions are particularly effective
+on smaller and denser interaction graphs
+\parencite{ouledmeriem2025hybrid}.
+
+% ------------------------------------------------------------
+\subsection{Variant 4 — TGT-BERT4Rec}
+% ------------------------------------------------------------
+
+\textbf{TGT-BERT4Rec} (Temporal Graph Transformer Hybrid)
+augments the item co-occurrence graph with \textbf{temporal
+information} by encoding interaction timestamps as continuous
+time embeddings \parencite{ouledmeriem2025hybrid}. A temporal
+attention bias is added to the standard scaled dot-product
+attention, allowing the model to modulate attention scores
+based on the time gap between interactions:
+\begin{equation}
+  \text{Attention}(\mathbf{Q}, \mathbf{K}, \mathbf{V}, \mathbf{T}) =
+    \text{softmax}\!\left(
+      \frac{\mathbf{Q}\mathbf{K}^\top + \text{TimeBias}(\mathbf{T})}
+           {\sqrt{d_k}}
+    \right) \mathbf{V},
+\end{equation}
+where $\text{TimeBias}(\mathbf{T})$ is a learned function of the
+time-gap embedding $\mathbf{T}$ between interactions
+\parencite{ouledmeriem2025hybrid}. This enriches the item
+representations with temporal context beyond simple positional
+encoding.
+
+A \textbf{learnable gated fusion} combines the TGT encoder output
+$\mathbf{h}_i^{\text{TGT}}$ with the BERT4Rec sequence
+representation:
+\begin{equation}
+  \alpha = \sigma(g), \qquad
+  \mathbf{h}_i^{(u)} = \alpha\, \mathbf{h}_i^{\text{BERT}}
+                      + (1 - \alpha)\, \mathbf{h}_i^{\text{TGT}},
+\end{equation}
+where $g$ is a learnable scalar gate and $\sigma$ is the sigmoid
+function. This gating mechanism allows the model to learn the
+optimal balance between the global self-attention representation
+and the temporal graph encoding. TGT-BERT4Rec is particularly
+well-suited to short-history users, whose temporal interaction
+patterns encode strong preference signals even when interaction
+counts are low. Empirically, it achieves the highest HR@10 for
+short-history users on both ML-100K and ML-1M, with HR@10 of
+$0.2778$ and $0.2209$ respectively
+\parencite{ouledmeriem2025hybrid}.
+
+% ------------------------------------------------------------
+\subsection{Summary of the Four Variants}
+% ------------------------------------------------------------
+
+\begin{table}[h]
+\centering
+\caption{Summary of the four hybrid model variants}
+\renewcommand{\arraystretch}{1.3}
+\footnotesize
+\begin{tabular}{p{3.2cm} p{3.2cm} p{3.2cm} p{2.8cm}}
+\toprule
+\textbf{Variant} & \textbf{Auxiliary signal} &
+\textbf{Fusion type} & \textbf{Best on} \\
+\midrule
+HybridFixed     & GCN co-occurrence graph  & Global learnable $\alpha$ & ML-1M overall \\
+HybridDiscrete  & GCN co-occurrence graph  & Per-user discrete $\alpha(u)$ & Short-history users \\
+DCH-BERT4Rec    & Dilated conv encoder     & Global learnable $\alpha$ & ML-100K overall \\
+TGT-BERT4Rec    & Temporal graph encoder   & Gated sigmoid $\alpha$   & Short-history users \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{Training Objective}
+% ============================================================
+
+\subsection{Binary Cross-Entropy Loss}
+
+All four hybrid variants are trained with a
+\textbf{point-wise Binary Cross-Entropy (BCE) loss} with sampled
+negative items \parencite{ouledmeriem2025hybrid}. For each
+training instance $(u, t)$, let $i^+$ denote the ground-truth
+positive item at time step $t+1$, and let $\mathcal{N}_{u,t}$
+denote a set of randomly sampled negative items --- items that
+user $u$ has not interacted with. The relevance score for any
+candidate item $j$ is computed as:
+\begin{equation}
+  s_{uj} = \mathbf{h}_u^\top\, \mathbf{h}_j^{(u)},
+\end{equation}
+where $\mathbf{h}_u$ is the sequence embedding from BERT4Rec
+and $\mathbf{h}_j^{(u)}$ is the fused item embedding from the
+fusion layer. The training loss is:
+\begin{equation}
+  \mathcal{L} = -\sum_{(u,t)}
+    \left[
+      \log \sigma\!\left(s_{u i^+}\right)
+      + \sum_{j \in \mathcal{N}_{u,t}}
+        \log\!\left(1 - \sigma\!\left(s_{uj}\right)\right)
+    \right]
+    + \lambda \|\Theta\|_2^2,
+\end{equation}
+where $\sigma(\cdot)$ is the sigmoid function, $\lambda$ is the
+$L_2$ regularization coefficient, and $\Theta$ denotes all
+trainable parameters \parencite{ouledmeriem2025hybrid}. The
+regularization term penalizes large parameter norms and reduces
+overfitting, which is particularly important for sparse users
+with few training instances.
+
+\subsection{Negative Sampling Strategy}
+
+For each positive training instance $(u, i^+)$, we sample
+\textbf{100 negative items} uniformly at random from
+$\mathcal{I} \setminus S_u$ --- the set of items not present
+in user $u$'s interaction history \parencite{ouledmeriem2025hybrid}.
+This large number of negatives per positive provides a rich
+contrastive training signal and ensures that the model learns
+to distinguish the ground-truth item from a diverse set of
+distractors at every training step. BCE with sampled negatives
+is preferred over full softmax over the item vocabulary for
+computational efficiency, as the latter requires computing
+scores for all $|\mathcal{I}|$ items at every training step.
+
+\subsection{Joint End-to-End Optimization}
+
+All model components are optimized \textbf{jointly end-to-end}
+using a single loss function \parencite{ouledmeriem2025hybrid}.
+This includes the BERT4Rec Transformer parameters, the GCN
+encoder weight matrices $\{\mathbf{W}^{(\ell)}\}$, the projection
+layer $(\mathbf{W}_g, \mathbf{b}_g)$, and the fusion weights.
+Joint optimization ensures that the GCN and BERT4Rec components
+co-adapt during training: the GCN learns to produce graph
+embeddings that are maximally complementary to the Transformer's
+sequential representations, rather than being frozen or
+pre-trained independently.
+
+The sole exception is the HybridDiscrete variant, where the three
+scalar values $(\alpha_{\text{short}}, \alpha_{\text{mid}},
+\alpha_{\text{long}})$ are treated as hyperparameters tuned on
+the validation set rather than gradient-trained parameters.
+As discussed in Section~2.5, this means these values receive no
+gradient signal during training, which partially explains
+HybridDiscrete's lower aggregate performance compared to
+HybridFixed \parencite{ouledmeriem2025hybrid}.
+
+\subsection{Optimizer and Training Protocol}
+
+All models are optimized using the \textbf{Adam optimizer}
+\parencite{kingma2015adam} with the following settings:
+\begin{itemize}
+  \item Learning rate: $\eta = 0.001$
+  \item Batch size: $256$
+  \item Maximum epochs: $200$
+  \item Early stopping patience: $20$ epochs on validation NDCG@10
+\end{itemize}
+
+Training is stopped when the validation NDCG@10 does not improve
+for 20 consecutive epochs, and the model checkpoint with the best
+validation NDCG@10 is used for final test evaluation. This
+protocol ensures fair comparison across all models and prevents
+overfitting to the training set \parencite{ouledmeriem2025hybrid}.
+
+% ============================================================
+\section{Hyperparameters and Complexity Analysis}
+% ============================================================
+
+\subsection{Hyperparameter Settings}
+
+All models are implemented and evaluated under identical
+conditions for fair comparison. Table~\ref{tab:hyperparams}
+summarizes the full set of hyperparameters used across all
+experiments \parencite{ouledmeriem2025hybrid}.
+
+\begin{table}[h]
+\centering
+\caption{Hyperparameter settings for all models}
+\label{tab:hyperparams}
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{lc}
+\toprule
+\textbf{Parameter} & \textbf{Value} \\
+\midrule
+\multicolumn{2}{l}{\textit{General}} \\
+Embedding dimension $d$              & 64 \\
+Attention heads                      & 2 \\
+Transformer blocks $B$               & 2 \\
+Dropout rate                         & 0.2 \\
+Max sequence length (hybrid models)  & 200 \\
+Max sequence length (baselines)      & 50 \\
+\midrule
+\multicolumn{2}{l}{\textit{Training}} \\
+Optimizer                            & Adam \\
+Learning rate $\eta$                 & 0.001 \\
+Batch size                           & 256 \\
+Max epochs                           & 200 \\
+Early stopping patience              & 20 (val NDCG@10) \\
+Negative samples per positive        & 100 \\
+\midrule
+\multicolumn{2}{l}{\textit{GCN Encoder}} \\
+GCN layers $L_{\text{GNN}}$          & 2 \\
+Co-occurrence window size $w$        & 5 \\
+Min co-occurrence threshold $\tau$   & 2 \\
+\midrule
+\multicolumn{2}{l}{\textit{HybridDiscrete Fusion}} \\
+Short-history threshold $L^*_{\text{short}}$ & 10 \\
+Long-history threshold $L^*_{\text{long}}$   & 30 \\
+$\alpha_{\text{short}}$              & 0.3 \\
+$\alpha_{\text{mid}}$                & 0.5 \\
+$\alpha_{\text{long}}$               & 0.7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent One notable asymmetry in Table~\ref{tab:hyperparams}
+is the difference in maximum sequence length between hybrid models
+(200) and pure baselines (50). This difference exists because
+hybrid models leverage the GCN graph signal to compensate for
+sparse users, making longer sequences informative without
+introducing noise. However, this is acknowledged as a
+methodological limitation: future work should control for uniform
+truncation across all model families to ensure strictly fair
+comparison \parencite{ouledmeriem2025hybrid}.
+
+\subsection{Complexity Analysis}
+
+\textbf{Time complexity.} The dominant computational cost of the
+proposed hybrid models comes from two components. The GCN encoder
+performs $L_{\text{GNN}}$ sparse matrix multiplications over the
+co-occurrence graph, with time complexity
+$\mathcal{O}(|\mathcal{E}| \cdot d)$ per layer, where
+$|\mathcal{E}|$ is the number of edges in $\mathcal{G}$ and $d$
+is the embedding dimension. The BERT4Rec Transformer applies
+self-attention over sequences of length $L$, with time complexity
+$\mathcal{O}(L^2 \cdot d)$ per attention block. The fusion
+operation adds only $\mathcal{O}(|\mathcal{I}| \cdot d)$
+element-wise operations, which is negligible compared to the
+above. The total time complexity per training step is therefore:
+\begin{equation}
+  \mathcal{O}\!\left(
+    L_{\text{GNN}} \cdot |\mathcal{E}| \cdot d
+    + B \cdot L^2 \cdot d
+  \right),
+\end{equation}
+which is dominated by the Transformer's quadratic attention when
+$L$ is large \parencite{ouledmeriem2025hybrid}.
+
+\textbf{Parameter complexity.} A key strength of the proposed
+architecture is its \textbf{parameter efficiency}. All four
+hybrid variants add only approximately $0.1$M parameters over
+the BERT4Rec backbone, corresponding to a $+5.9\%$ increase
+from $1.7$M to $1.8$M total parameters
+\parencite{ouledmeriem2025hybrid}. The additional parameters
+correspond exclusively to the GCN weight matrices
+$\{\mathbf{W}^{(\ell)}\}$ and the projection layer
+$(\mathbf{W}_g, \mathbf{b}_g)$. This confirms that the
+performance gains reported in Chapter~3 are driven by
+\textbf{architectural complementarity} rather than by an
+increased parameter budget. Table~\ref{tab:params} summarizes
+the parameter counts for all models.
+
+\begin{table}[h]
+\centering
+\caption{Trainable parameter counts for all models on ML-1M}
+\label{tab:params}
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Model} & \textbf{\# Parameters} & \textbf{vs BERT4Rec} \\
+\midrule
+GRU4Rec                  & 1.2M & --- \\
+LightGCN                 & 0.8M & --- \\
+Caser                    & 1.1M & --- \\
+SASRec                   & 1.7M & --- \\
+BERT4Rec                 & 1.7M & baseline \\
+\midrule
+DCH-BERT4Rec\textsuperscript{†}    & 1.8M & +5.9\% \\
+HybridDiscrete\textsuperscript{†}  & 1.8M & +5.9\% \\
+TGT-BERT4Rec\textsuperscript{†}    & 1.8M & +5.9\% \\
+HybridFixed\textsuperscript{†}     & 1.8M & +5.9\% \\
+\bottomrule
+\multicolumn{3}{l}{\textsuperscript{†}Proposed hybrid model}
+\end{tabular}
+\end{table}
+
+% ============================================================
+\section{Chapter Summary}
+% ============================================================
+
+This chapter presented the methodology of the first contribution
+of this memoir: the \textbf{Length-Adaptive Hybrid GNN-Transformer}
+for sequential recommendation \parencite{ouledmeriem2025hybrid}.
+The central motivation was the observation that existing hybrid
+approaches apply a fixed fusion weight uniformly to all users,
+ignoring a fundamental reality of interaction data: the relative
+reliability of graph signals versus sequential signals varies
+dramatically with the length of each user's interaction history.
+
+The proposed architecture addresses this limitation through a
+shared pipeline combining two complementary encoders. The
+\textbf{BERT4Rec backbone} captures fine-grained temporal
+dynamics within each user's interaction sequence through
+bidirectional self-attention. The \textbf{GCN encoder} captures
+global structural relationships between items by propagating
+embeddings over an item co-occurrence graph built from all
+training sequences. These two signals are blended through a
+\textbf{fusion layer} that produces a unified item embedding
+$\mathbf{h}_i^{(u)} = \alpha(u)\,\mathbf{e}_i +
+(1-\alpha(u))\,\mathbf{g}'_i$, where $\alpha(u) \in [0,1]$
+controls the trade-off between the two sources of information.
+
+Four variants were introduced, each differing in how the
+auxiliary signal is constructed and how $\alpha(u)$ is
+determined:
+
+\begin{itemize}
+  \item \textbf{HybridFixed} applies a single global learnable
+        $\alpha$ to all users, achieving the strongest aggregate
+        performance through end-to-end gradient optimization.
+
+  \item \textbf{HybridDiscrete} applies a user-specific
+        $\alpha(u)$ determined by three discrete bins based on
+        interaction history length, delivering the largest
+        targeted gains for short-history and sparse users.
+
+  \item \textbf{DCH-BERT4Rec} replaces the GCN with a dilated
+        causal convolutional encoder, capturing local sequential
+        transition patterns at multiple temporal scales.
+
+  \item \textbf{TGT-BERT4Rec} augments the co-occurrence graph
+        with temporal interaction timestamps and uses a gated
+        fusion mechanism, achieving the strongest performance
+        for short-history users on both datasets.
+\end{itemize}
+
+All four variants share the same training objective --- Binary
+Cross-Entropy loss with 100 sampled negatives per positive,
+optimized end-to-end with Adam --- and add only $+0.1$M
+parameters ($+5.9\%$) over the BERT4Rec backbone, confirming
+that their performance gains stem from architectural
+complementarity rather than increased model capacity
+\parencite{ouledmeriem2025hybrid}.
+
+The experimental evaluation of all four variants against the
+five baselines (GRU4Rec, Caser, SASRec, BERT4Rec, LightGCN)
+on MovieLens-100K and MovieLens-1M is presented in the
+following chapter.
+
+
+
+% ============================================================
+\chapter{Experimental Evaluation}
+\addcontentsline{toc}{chapter}{Chapter 3 — Experimental Evaluation}
+% ============================================================
+
+\section{Datasets}
+
+All experiments are conducted on two standard sequential recommendation benchmarks from the MovieLens collection \parencite{harper2015movielens}: \textbf{MovieLens-100K} (ML-100K) and \textbf{MovieLens-1M} (ML-1M). These datasets are widely used in the sequential recommendation literature \parencite{kang2018self, sun2019bert4rec, he2020lightgcn} and provide a rigorous basis for comparison with existing work.
+
+\textbf{MovieLens-100K} contains 100,000 ratings from 943 users on 1,682 movies. After filtering users with fewer than 5 interactions and converting ratings to implicit feedback, the dataset yields \textbf{938 test users}.
+
+\textbf{MovieLens-1M} contains approximately 1 million ratings from 6,040 users on 3,706 movies. After applying the same preprocessing, the dataset yields \textbf{6,034 test users}.
+
+\subsection{Preprocessing and Evaluation Protocol}
+
+For both datasets, we adopt the \textbf{leave-one-out} evaluation protocol \parencite{kang2018self}: the last item in each user's chronologically ordered interaction sequence is held out for testing, the second-to-last item for validation, and all remaining items constitute the training set. Interaction sequences are truncated to a maximum length of 200 for hybrid models and 50 for pure sequential baselines, following the implementation details in \parencite{ouledmeriem2025hybrid}.
+
+During evaluation, each ground-truth test item is ranked against \textbf{all items} in the full catalog, without negative sampling. This is a stricter evaluation protocol than the sampled-negative approach and provides a more reliable measure of true ranking performance.
+
+\section{Implementation Details and Training Protocol}
+
+All models are implemented under identical conditions for fair comparison. Table~\ref{tab:hyperparams_ch3} reproduces the complete hyperparameter settings used across all experiments \parencite{ouledmeriem2025hybrid}.
+
+\begin{table}[h]
+\centering
+\caption{Hyperparameter settings for all models}
+\label{tab:hyperparams_ch3}
+\renewcommand{\arraystretch}{1.3}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lccccccccc}
+\toprule
+\textbf{Model} & \textbf{d} & \textbf{heads} & \textbf{blocks} & \textbf{layers} & \textbf{dropout} & \textbf{max\_len} & \textbf{lr} & \textbf{batch} & \textbf{patience} \\
+\midrule
+BERT4Rec             & 64 & 2 & 2 & 1 & 0.2 & 50  & 0.001 & 256 & 20 \\
+BERT-Hybrid-Discrete & 64 & 2 & 2 & — & 0.2 & 200 & 0.001 & 256 & 20 \\
+BERT-Hybrid-Fixed    & 64 & 2 & 2 & — & 0.2 & 200 & 0.001 & 256 & 20 \\
+Caser                & 64 & 2 & 2 & 1 & 0.2 & 50  & 0.001 & 256 & 20 \\
+GRU4Rec              & 64 & 2 & 2 & 1 & 0.2 & 50  & 0.001 & 256 & 20 \\
+LightGCN             & 64 & 2 & 2 & 1 & 0.2 & 50  & 0.001 & 256 & 20 \\
+SASRec               & 64 & 2 & 2 & 1 & 0.2 & 50  & 0.001 & 256 & 20 \\
+TCN-BERT4Rec         & 64 & 2 & 2 & — & 0.2 & 200 & 0.001 & 256 & 20 \\
+TGT-BERT4Rec         & 64 & 2 & 2 & — & 0.2 & 200 & 0.001 & 256 & 20 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+All models are optimized using the Adam optimizer with learning rate \(\eta = 0.001\), batch size 256, and early stopping with patience 20 on validation NDCG@10. The best model checkpoint is selected based on the highest validation NDCG@10 across up to 200 epochs \parencite{ouledmeriem2025hybrid}.
+
+Table~\ref{tab:best_epoch} reports the best epoch and best validation NDCG@10 for each model. BERT4Rec converges at epoch 50 with a validation NDCG@10 of 0.0705, while TGT-BERT4Rec requires the most training, reaching its best checkpoint at epoch 148. GRU4Rec converges fastest at epoch 30 with the lowest validation NDCG@10 of 0.0335, consistent with its weakest test performance. LightGCN converges at epoch 1, reflecting the absence of any sequential modeling capacity.
+
+\begin{table}[h]
+\centering
+\caption{Best epoch and validation NDCG@10 per model on ML-1M}
+\label{tab:best_epoch}
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Model} & \textbf{Best Epoch} & \textbf{Best Val NDCG@10} \\
+\midrule
+BERT4Rec             & 50  & 0.0705 \\
+BERT-Hybrid-Discrete & 64  & — \\
+BERT-Hybrid-Fixed    & 88  & — \\
+Caser                & 63  & 0.0657 \\
+GRU4Rec              & 30  & 0.0335 \\
+LightGCN             & 1   & 0.0107 \\
+SASRec               & 113 & 0.0531 \\
+TCN-BERT4Rec         & 84  & — \\
+TGT-BERT4Rec         & 148 & — \\
+\bottomrule
+\multicolumn{3}{l}{— denotes full-catalog evaluation (no sampled validation)} \\
+\end{tabular}
+\end{table}
+
+\subsection{Training Dynamics}
+
+Figure~\ref{fig:train_loss} shows the training loss per epoch for all models on ML-1M. All models except LightGCN exhibit a rapid decrease in the first 25 epochs followed by a gradual plateau, confirming stable convergence. LightGCN exhibits a flat training loss from the very first epoch, reflecting that its purely graph-based collaborative filtering objective converges immediately without sequential modeling. GRU4Rec shows a slower initial descent and a higher plateau than all BERT-based models, consistent with the known difficulty of training recurrent architectures on long-tail interaction distributions. TGT-BERT4Rec achieves the lowest final training loss, suggesting that temporal graph signals provide the richest training objective.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{picture/figures/training_loss_1m.png}
+\caption{Training loss per epoch for all models on ML-1M. LightGCN converges at epoch 1; TGT-BERT4Rec achieves the lowest final loss.}
+\label{fig:train_loss}
+\end{figure}
+
+Figure~\ref{fig:val_ndcg} shows the validation NDCG@10 per epoch. The BERT-based hybrid models cluster near the top of the chart, all achieving validation NDCG@10 above 0.063. SASRec lags behind all BERT-based models despite converging later (epoch 113), confirming the advantage of bidirectional attention. GRU4Rec plateaus early at a low validation NDCG@10 of 0.033, limited by the vanishing gradient problem on long sequences \parencite{hidasi2016gru4rec}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{picture/figures/val_ndgc_10.png}
+\caption{Validation NDCG@10 per epoch for all models on ML-1M. Dots mark the best checkpoint used for final evaluation. TGT-BERT4Rec achieves the highest peak validation NDCG@10 (0.0745) at epoch 148.}
+\label{fig:val_ndcg}
+\end{figure}
+
+\section{Baselines}
+
+We compare the four proposed hybrid variants against five established baselines that represent the major paradigms in sequential recommendation \parencite{ouledmeriem2025hybrid}:
+
+\begin{itemize}
+  \item \textbf{GRU4Rec} \parencite{hidasi2016gru4rec}: The first recurrent model for session-based recommendation, using Gated Recurrent Units to encode temporal interaction sequences.
+  \item \textbf{Caser} \parencite{tang2018caser}: A convolutional sequence model that captures point-level and union-level sequential patterns via horizontal and vertical filters over the most recent items.
+  \item \textbf{SASRec} \parencite{kang2018self}: A unidirectional Transformer with causal self-attention, trained with binary cross-entropy loss.
+  \item \textbf{BERT4Rec} \parencite{sun2019bert4rec}: A bidirectional Transformer trained with a Cloze-style masked item prediction objective. This is the primary baseline and the shared backbone of all hybrid variants.
+  \item \textbf{LightGCN} \parencite{he2020lightgcn}: A simplified graph convolutional network that performs pure neighborhood aggregation on the user-item bipartite graph. It is included as a reference point to isolate the contribution of pure collaborative filtering signals.
+\end{itemize}
+
+\section{Main Results on MovieLens-1M}
+
+Table~\ref{tab:ml1m_full} reports the test performance of all nine models on ML-1M across HR, NDCG, and MRR at cutoffs \(K \in \{5, 10, 20\}\). Bold values indicate the best result per column; underlined values indicate the second-best.
+
+\begin{table}[h]
+\centering
+\caption{Test performance on MovieLens-1M. Best results are bold, second-best underlined.}
+\label{tab:ml1m_full}
+\renewcommand{\arraystretch}{1.3}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+\textbf{Model} &
+\textbf{HR@5} & \textbf{NDCG@5} & \textbf{MRR@5} &
+\textbf{HR@10} & \textbf{NDCG@10} & \textbf{MRR@10} &
+\textbf{HR@20} & \textbf{NDCG@20} & \textbf{MRR@20} \\
+\midrule
+BERT4Rec
+  & 0.0757 & 0.0453 & 0.0354
+  & 0.1374 & 0.0652 & 0.0437
+  & 0.2274 & 0.0879 & 0.0498 \\
+BERT-Hybrid-Discrete
+  & 0.0832 & 0.0492 & 0.0381
+  & 0.1427 & 0.0682 & 0.0459
+  & 0.2317 & 0.0905 & 0.0519 \\
+BERT-Hybrid-Fixed
+  & \textbf{0.0852} & \textbf{0.0524} & \textbf{0.0417}
+  & \textbf{0.1485} & \textbf{0.0727} & \textbf{0.0499}
+  & \textbf{0.2511} & \textbf{0.0984} & \textbf{0.0569} \\
+Caser
+  & 0.0684 & 0.0397 & 0.0303
+  & 0.1260 & 0.0581 & 0.0379
+  & 0.2135 & 0.0801 & 0.0438 \\
+GRU4Rec
+  & 0.0365 & 0.0214 & 0.0165
+  & 0.0708 & 0.0324 & 0.0210
+  & 0.1173 & 0.0440 & 0.0241 \\
+LightGCN
+  & 0.0121 & 0.0065 & 0.0047
+  & 0.0247 & 0.0106 & 0.0064
+  & 0.0467 & 0.0161 & 0.0079 \\
+SASRec
+  & 0.0515 & 0.0298 & 0.0228
+  & 0.0979 & 0.0446 & 0.0287
+  & 0.1767 & 0.0643 & 0.0340 \\
+TCN-BERT4Rec
+  & 0.0754 & 0.0449 & 0.0350
+  & 0.1385 & 0.0652 & 0.0433
+  & 0.2325 & 0.0888 & 0.0498 \\
+TGT-BERT4Rec
+  & \underline{0.0820} & \underline{0.0477} & \underline{0.0365}
+  & \underline{0.1480} & \underline{0.0689} & \underline{0.0452}
+  & \underline{0.2444} & \underline{0.0930} & \underline{0.0517} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\subsection{Overall Performance Analysis}
+
+The results in Table~\ref{tab:ml1m_full} confirm three clear findings. First, \textbf{BERT-Hybrid-Fixed achieves the strongest aggregate performance} across all nine metrics, improving over BERT4Rec by \(+8.1\%\) on HR@10, \(+11.5\%\) on NDCG@10, and \(+14.2\%\) on MRR@10 \parencite{ouledmeriem2025hybrid}. Second, all four hybrid variants outperform all five baselines on at least one metric, confirming that augmenting BERT4Rec with a complementary structural or temporal signal yields consistent gains. Third, LightGCN performs worst by a significant margin, confirming that static graph-based collaborative filtering without temporal modeling is insufficient for next-item prediction tasks.
+
+The heatmap in Figure~\ref{fig:heatmap_1m} provides a visual overview of all metrics simultaneously. The consistently deeper red shading of BERT-Hybrid-Fixed and TGT-BERT4Rec across all columns confirms their superiority, while the uniformly pale coloring of LightGCN and GRU4Rec quantifies the gap between graph-only and sequence-aware architectures.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{picture/figures/heat_map_1m.png}
+\caption{All test metrics heatmap on ML-1M. Darker red indicates higher metric values. BERT-Hybrid-Fixed and TGT-BERT4Rec consistently show the deepest shading.}
+\label{fig:heatmap_1m}
+\end{figure}
+
+\subsection{Relative Improvement over BERT4Rec}
+
+Table~\ref{tab:improvements} reports the relative improvement (\%) of each model over BERT4Rec across all metrics at \(K \in \{5, 10, 20\}\). BERT-Hybrid-Fixed achieves the largest gains at every cutoff and every metric: \(+12.4\%\) HR@5, \(+15.7\%\) NDCG@5, \(+17.8\%\) MRR@5, \(+8.1\%\) HR@10, \(+11.5\%\) NDCG@10, and \(+14.3\%\) MRR@10. TGT-BERT4Rec is the strongest runner-up with \(+7.7\%\) HR@10. In contrast, GRU4Rec, LightGCN, and SASRec all show large negative improvements relative to BERT4Rec, confirming the superiority of bidirectional attention over recurrent and unidirectional architectures.
+
+\begin{table}[h]
+\centering
+\caption{Relative improvement (\%) compared to BERT4Rec on ML-1M.}
+\label{tab:improvements}
+\renewcommand{\arraystretch}{1.3}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+\textbf{Model} &
+$\Delta$ \textbf{HR@5} & $\Delta$ \textbf{NDCG@5} & $\Delta$ \textbf{MRR@5} &
+$\Delta$ \textbf{HR@10} & $\Delta$ \textbf{NDCG@10} & $\Delta$ \textbf{MRR@10} &
+$\Delta$ \textbf{HR@20} & $\Delta$ \textbf{NDCG@20} & $\Delta$ \textbf{MRR@20} \\
+\midrule
+BERT4Rec             & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 \\
+BERT-Hybrid-Discrete & +9.85 & +8.52 & +7.50 & +3.86 & +4.57 & +5.02 & +1.90 & +2.98 & +4.08 \\
+BERT-Hybrid-Fixed    & \textbf{+12.47} & \textbf{+15.73} & \textbf{+17.77} & \textbf{+8.08} & \textbf{+11.37} & \textbf{+14.38} & \textbf{+10.42} & \textbf{+11.97} & \textbf{+14.22} \\
+Caser                & $-9.63$ & $-12.47$ & $-14.20$ & $-8.32$ & $-10.90$ & $-13.26$ & $-6.12$ & $-8.84$ & $-12.01$ \\
+GRU4Rec              & $-51.86$ & $-52.85$ & $-53.49$ & $-48.49$ & $-50.30$ & $-51.84$ & $-48.40$ & $-49.92$ & $-51.61$ \\
+LightGCN             & $-84.03$ & $-85.58$ & $-86.64$ & $-82.03$ & $-83.83$ & $-85.43$ & $-79.45$ & $-81.71$ & $-84.24$ \\
+SASRec               & $-31.95$ & $-34.14$ & $-35.70$ & $-28.71$ & $-31.60$ & $-34.17$ & $-22.30$ & $-26.86$ & $-31.73$ \\
+TCN-BERT4Rec         & $-0.44$ & $-0.86$ & $-1.11$ & $+0.84$ & $-0.07$ & $-0.76$ & $+2.26$ & $+1.07$ & $-0.15$ \\
+TGT-BERT4Rec         & $+8.32$ & $+5.25$ & $+3.06$ & $+7.72$ & $+5.58$ & $+3.51$ & $+7.51$ & $+5.83$ & $+3.75$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\section{Per-History-Length Analysis}
+
+A core motivation of the length-adaptive design is that the relative utility of graph versus sequential signals varies with the user's interaction history length. To validate this, we segment all 6,034 test users on ML-1M into three groups: \textbf{SHORT} (\(L(u) \leq 10\), \(n = 162\) users), \textbf{MEDIUM} (\(10 < L(u) \leq 30\), \(n = 2{,}579\) users), and \textbf{OVERALL} (\(n = 6{,}034\) users) \parencite{ouledmeriem2025hybrid}.
+
+\subsection{Short-History Users}
+
+For \textbf{short-history users} (Table~\ref{tab:bucket_short}), TGT-BERT4Rec achieves the best HR@10 (0.2778) and NDCG@10 (0.1213), outperforming BERT4Rec by \(+18.4\%\) and \(+11.8\%\) respectively. This confirms that temporal graph signals are particularly informative when sequential evidence is scarce: even with fewer than 10 interactions, the time gaps between interactions encode strong preference signals. BERT-Hybrid-Discrete achieves the same HR@10 as BERT-Hybrid-Fixed (0.2469) for short-history users, directly validating the length-adaptive design: by assigning \(\alpha = 0.3\) to short-history users, the model compensates for insufficient sequential context by leaning on the GNN graph signal.
+
+Figures~\ref{fig:hr10_buckets}, \ref{fig:ndcg10_buckets}, and \ref{fig:mrr10_buckets} visualize HR@10, NDCG@10, and MRR@10 across the three groups for all models. The consistent pattern across all three metrics confirms that TGT-BERT4Rec dominates for short-history users and BERT-Hybrid-Fixed dominates for medium-history users.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{picture/figures/hr10_buckets.png}
+\caption{HR@10 across Short, Medium, and Overall user groups on ML-1M. TGT-BERT4Rec achieves the highest short-history HR@10 (0.2778); BERT-Hybrid-Fixed leads for medium and overall.}
+\label{fig:hr10_buckets}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{picture/figures/ndcg10_buckets.png}
+\caption{NDCG@10 across Short, Medium, and Overall user groups on ML-1M. TGT-BERT4Rec achieves NDCG@10 of 0.1213 for short-history users, a \(+11.8\%\) improvement over BERT4Rec.}
+\label{fig:ndcg10_buckets}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{picture/figures/mrr10_buckets.png}
+\caption{MRR@10 across Short, Medium, and Overall user groups on ML-1M. All hybrid models outperform BERT4Rec across all three user groups.}
+\label{fig:mrr10_buckets}
+\end{figure}
+
+\subsection{Medium-History Users}
+
+For \textbf{medium-history users} (\(2{,}579\) users with \(10 < L(u) \leq 30\)), BERT-Hybrid-Fixed achieves the top HR@10 (0.1927), representing a \(+43.1\%\) improvement over BERT4Rec (0.1347). TGT-BERT4Rec ranks second with HR@10 of 0.1912. BERT-Hybrid-Discrete also substantially improves over BERT4Rec with HR@10 of 0.1834 (\(+36.2\%\)), demonstrating that all hybrid variants generalize well to medium-length sequences. Figures~\ref{fig:hr20_buckets}, \ref{fig:ndcg20_buckets}, and \ref{fig:mrr20_buckets} extend this analysis to the @20 cutoff, showing identical ranking patterns.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{picture/figures/hr20_buckets.png}
+\caption{HR@20 across Short, Medium, and Overall user groups on ML-1M. TGT-BERT4Rec leads for short-history users (0.3642), BERT-Hybrid-Fixed leads for medium (0.3110).}
+\label{fig:hr20_buckets}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{picture/figures/ndcg20_buckets.png}
+\caption{NDCG@20 across Short, Medium, and Overall user groups on ML-1M.}
+\label{fig:ndcg20_buckets}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{picture/figures/mrr20_buckets.png}
+\caption{MRR@20 across Short, Medium, and Overall user groups on ML-1M.}
+\label{fig:mrr20_buckets}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\caption{Per-bucket HR@10 / NDCG@10 / MRR@10 on ML-1M.}
+\label{tab:bucket_short}
+\renewcommand{\arraystretch}{1.3}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lrrr|rrr|rrr}
+\toprule
+& \multicolumn{3}{c|}{\textbf{SHORT} (\(n=162\))} & \multicolumn{3}{c|}{\textbf{MEDIUM} (\(n=2{,}579\))} & \multicolumn{3}{c}{\textbf{OVERALL} (\(n=6{,}034\))} \\
+\textbf{Model}
+  & HR@10 & NDCG@10 & MRR@10 & HR@10 & NDCG@10 & MRR@10 & HR@10 & NDCG@10 & MRR@10 \\
+\midrule
+BERT4Rec
+  & 0.2346 & 0.1085 & 0.0707 & 0.1347 & 0.0640 & 0.0429 & 0.1374 & 0.0652 & 0.0437 \\
+BERT-Hybrid-Discrete
+  & 0.2469 & 0.1132 & 0.0732 & 0.1834 & 0.0884 & 0.0598 & 0.1427 & 0.0682 & 0.0459 \\
+BERT-Hybrid-Fixed
+  & 0.2469 & 0.1102 & 0.0700 & \textbf{0.1927} & \textbf{0.0963} & \textbf{0.0672} & \textbf{0.1485} & \textbf{0.0727} & \textbf{0.0499} \\
+Caser
+  & 0.2284 & 0.0964 & 0.0580 & 0.1231 & 0.0571 & 0.0373 & 0.1260 & 0.0581 & 0.0379 \\
+GRU4Rec
+  & 0.0494 & 0.0229 & 0.0149 & 0.0714 & 0.0327 & 0.0212 & 0.0708 & 0.0324 & 0.0210 \\
+LightGCN
+  & 0.0309 & 0.0125 & 0.0071 & 0.0245 & 0.0105 & 0.0063 & 0.0247 & 0.0106 & 0.0064 \\
+SASRec
+  & 0.1420 & 0.0776 & 0.0583 & 0.0967 & 0.0437 & 0.0279 & 0.0979 & 0.0446 & 0.0287 \\
+TCN-BERT4Rec
+  & 0.2222 & 0.1066 & 0.0710 & 0.1838 & 0.0867 & 0.0578 & 0.1385 & 0.0652 & 0.0433 \\
+TGT-BERT4Rec
+  & \textbf{0.2778} & \textbf{0.1213} & \textbf{0.0757} & 0.1912 & 0.0895 & 0.0589 & \underline{0.1480} & \underline{0.0689} & \underline{0.0452} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\section{Ablation Study}
+
+To isolate the contribution of each architectural component, Table~\ref{tab:ablation} compares three configurations on ML-1M: (1) pure BERT4Rec with no auxiliary encoder, (2) BERT-Hybrid-Fixed with a globally shared learnable \(\alpha\), and (3) BERT-Hybrid-Discrete with per-user length-adaptive \(\alpha(u)\) \parencite{ouledmeriem2025hybrid}.
+
+\begin{table}[h]
+\centering
+\caption{Ablation study on ML-1M (HR@10 / NDCG@10 / MRR@10).}
+\label{tab:ablation}
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Configuration} & \textbf{HR@10} & \textbf{NDCG@10} & \textbf{MRR@10} \\
+\midrule
+BERT4Rec (no aux. encoder)    & 0.1374 & 0.0652 & 0.0437 \\
++ GNN, fixed \(\alpha\)       & \textbf{0.1485} & \textbf{0.0727} & \textbf{0.0499} \\
++ GNN, adaptive \(\alpha(u)\) & 0.1427 & 0.0682 & 0.0459 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Adding the GNN with a fixed fusion weight improves HR@10 by \(+8.1\%\) over BERT4Rec, confirming that global item co-occurrence structure is a genuinely complementary signal \parencite{ouledmeriem2025hybrid}. The length-adaptive variant achieves intermediate overall metrics but delivers superior targeted gains for short-history users, demonstrating that the benefit of adaptive fusion is most pronounced at the user-group level rather than in aggregate statistics.
+
+Table~\ref{tab:best_per_metric} summarizes the best model per metric and user group. BERT-Hybrid-Fixed dominates all overall metrics and medium-history metrics, while TGT-BERT4Rec dominates all short-history metrics across every cutoff.
+
+\begin{table}[h]
+\centering
+\caption{Best model per metric and user group on ML-1M.}
+\label{tab:best_per_metric}
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{llll}
+\toprule
+\textbf{Group} & \textbf{Metric} & \textbf{Best Model} & \textbf{Value} \\
+\midrule
+Overall & HR@10   & BERT-Hybrid-Fixed & 0.1485 \\
+Overall & NDCG@10 & BERT-Hybrid-Fixed & 0.0727 \\
+Overall & MRR@10  & BERT-Hybrid-Fixed & 0.0499 \\
+\midrule
+Short   & HR@10   & TGT-BERT4Rec      & 0.2778 \\
+Short   & NDCG@10 & TGT-BERT4Rec      & 0.1213 \\
+Short   & MRR@10  & TGT-BERT4Rec      & 0.0757 \\
+\midrule
+Medium  & HR@10   & BERT-Hybrid-Fixed & 0.1927 \\
+Medium  & NDCG@10 & BERT-Hybrid-Fixed & 0.0963 \\
+Medium  & MRR@10  & BERT-Hybrid-Fixed & 0.0672 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Efficiency and Statistical Significance}
+
+A key strength of the proposed hybrid family is its \textbf{parameter efficiency}. All four variants add only \(+0.1\)M parameters (\(+5.9\%\)) over BERT4Rec, from 1.7M to 1.8M total trainable parameters \parencite{ouledmeriem2025hybrid}. The additional parameters correspond exclusively to the GCN weight matrices and the projection layer, confirming that performance gains are driven by architectural complementarity rather than increased model capacity.
+
+Statistical significance was assessed using an approximate permutation test \parencite{ouledmeriem2025hybrid}. BERT-Hybrid-Fixed, BERT-Hybrid-Discrete, and TGT-BERT4Rec each achieve statistically significant improvements over BERT4Rec on HR@10 (\(p < 0.05\)). TCN-BERT4Rec shows a smaller, non-significant gain on ML-1M overall, though it achieves the strongest results on ML-100K, suggesting it benefits more from smaller and denser interaction graphs.
+
+% ============================================================
+% Experimental Results on MovieLens-100K
+% ============================================================
+\section{Experimental Results on MovieLens-100K}
+
+This section evaluates the proposed hybrid architectures on the MovieLens-100K benchmark using the same experimental protocol adopted for the larger-scale dataset. The comparison includes the same baseline models: BERT4Rec, BERT-Hybrid-Discrete, BERT-Hybrid-Fixed, Caser, GRU4Rec, LightGCN, SASRec, TCN-BERT4Rec, and TGT-BERT4Rec. The reported results cover global test metrics, sequence-length-aware analysis, and training dynamics.
+
+\subsection{Overall Test Performance}
+
+The global test results on MovieLens-100K indicate that TCN-BERT4Rec delivers the most consistent ranking performance across the majority of evaluation metrics. As shown in Table~\ref{tab:ml100k_test}, TCN-BERT4Rec achieves the best values for HR@5, NDCG@5, HR@10, NDCG@10, HR@20, and NDCG@20, with scores of 0.0682, 0.0386, 0.1194, 0.0551, 0.2111, and 0.0780, respectively. These results confirm that incorporating temporal convolution into the BERT4Rec backbone improves the model’s ability to capture local sequential dependencies while preserving strong contextual modeling capacity.
+
+\begin{table}[h]
+\centering
+\caption{Overall test metrics on MovieLens-100K}
+\label{tab:ml100k_test}
+\renewcommand{\arraystretch}{1.3}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+\textbf{Model} &
+\textbf{HR@5} & \textbf{NDCG@5} & \textbf{MRR@5} &
+\textbf{HR@10} & \textbf{NDCG@10} & \textbf{MRR@10} &
+\textbf{HR@20} & \textbf{NDCG@20} & \textbf{MRR@20} \\
+\midrule
+BERT4Rec
+  & 0.0544 & 0.0311 & 0.0238
+  & 0.0949 & 0.0449 & 0.0294
+  & 0.1844 & 0.0671 & 0.0357 \\
+BERT-Hybrid-Discrete
+  & 0.0578 & 0.0327 & 0.0249
+  & 0.1005 & 0.0469 & 0.0305
+  & 0.1923 & 0.0698 & 0.0370 \\
+BERT-Hybrid-Fixed
+  & 0.0595 & 0.0341 & 0.0261
+  & 0.1039 & 0.0488 & 0.0319
+  & 0.1987 & 0.0725 & 0.0386 \\
+Caser
+  & 0.0624 & 0.0360 & 0.0279
+  & 0.1078 & 0.0504 & 0.0330
+  & 0.1994 & 0.0732 & 0.0394 \\
+GRU4Rec
+  & 0.0341 & 0.0188 & 0.0140
+  & 0.0655 & 0.0291 & 0.0181
+  & 0.1325 & 0.0458 & 0.0227 \\
+LightGCN
+  & 0.0227 & 0.0122 & 0.0092
+  & 0.0447 & 0.0185 & 0.0114
+  & 0.0916 & 0.0293 & 0.0141 \\
+SASRec
+  & 0.0535 & 0.0305 & 0.0235
+  & 0.0959 & 0.0445 & 0.0292
+  & 0.1887 & 0.0667 & 0.0355 \\
+TCN-BERT4Rec
+  & \textbf{0.0682} & \textbf{0.0386} & \textbf{0.0297}
+  & \textbf{0.1194} & \textbf{0.0551} & \textbf{0.0362}
+  & \textbf{0.2111} & \textbf{0.0780} & \textbf{0.0421} \\
+TGT-BERT4Rec
+  & \underline{0.0649} & \underline{0.0369} & \underline{0.0283}
+  & \underline{0.1140} & \underline{0.0524} & \underline{0.0345}
+  & \underline{0.2060} & \underline{0.0748} & \underline{0.0404} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+On ML-100K, TCN-BERT4Rec achieves the best overall results across all cutoffs, outperforming BERT4Rec by \(+25.8\%\) on HR@10 (0.1194 vs.\ 0.0949). This contrasts with ML-1M, where BERT-Hybrid-Fixed dominates, and suggests that dilated temporal convolutions are particularly effective on smaller and denser interaction graphs. TGT-BERT4Rec is the consistent runner-up, confirming that temporal graph signals provide a complementary advantage over both the GCN and TCN-based auxiliary encoders.
+
+% ============================================================
+% CHAPTER 4 — LLM ITEM DESCRIPTION STRATEGIES
+% ============================================================
+\chapter{LLM Item Description Strategies for Sequential Recommendation}
+\addcontentsline{toc}{chapter}{Chapter 4 — LLM Item Description Strategies}
+\label{ch:promptcraft}
+
+% ============================================================
+\section{Introduction and Motivation}
+% ============================================================
+
+The LLM2Sequential framework established by \textcite{boz2025improving}
+demonstrated that replacing randomly initialized item embeddings with
+dense representations generated by a pretrained Large Language Model
+yields consistent and substantial gains in sequential recommendation
+quality. The central mechanism is straightforward: each item is
+described by a short textual string, that string is passed through
+a frozen LLM encoder, and the resulting dense vector initializes
+--- and optionally fine-tunes --- the item embedding matrix of a
+downstream sequential model such as SASRec or BERT4Rec.
+
+Despite the practical impact of this finding, the original study
+leaves a critical design question unanswered: \textbf{how should
+an item be described to the LLM?} In the reference experiments,
+items are represented primarily by their bare title, with one dataset
+supplemented by additional metadata tags. No principled investigation
+across multiple formulation strategies is provided, and the authors
+themselves acknowledge in passing that enriching the description
+with tags improves results on one dataset --- a result whose
+implications are never systematically pursued.
+
+This gap matters because the textual description is the sole
+information channel between the item's content and the LLM encoder.
+The LLM cannot observe interaction patterns, purchase histories, or
+co-occurrence statistics; it can only encode what the description
+provides. A title-only description encodes little more than the item's
+name, while richer formulations --- metadata-enriched attribute lists,
+prose narratives built from the product description field,
+user-centric summaries framing the item through community preferences,
+or comparative profiles anchoring the item to related products ---
+may provide the LLM with substantially more discriminative and
+contextually relevant information. Each formulation activates a
+different subset of the LLM's pretrained knowledge, and the resulting
+embeddings may differ significantly in their discriminative capacity
+for the recommendation task.
+
+This chapter presents \textbf{Contribution 2} of this memoir: a
+systematic investigation of seven item description strategies for
+LLM-based sequential recommendation, evaluated on the Amazon Beauty
+dataset using BGE-M3 as the embedding model and SASRec as the
+downstream sequential model. The chapter is organized as follows.
+Section~\ref{sec:context} reviews the LLM2Sequential framework and
+its limitations. Section~\ref{sec:pipeline} describes the complete
+experimental pipeline implemented in this work. Section~\ref{sec:strategies}
+introduces and formalizes the seven description strategies.
+Section~\ref{sec:embedding_quality} analyzes the geometric properties
+of the resulting embedding spaces. Section~\ref{sec:promptcraft_results}
+presents and discusses the experimental results. Section~\ref{sec:promptcraft_summary}
+summarizes the key findings.
+
+
+% ============================================================
+\section{Context and Positioning: The LLM2Sequential Framework}
+\label{sec:context}
+% ============================================================
+
+\subsection{The LLM2Sequential Approach}
+
+\textcite{boz2025improving} systematically evaluated three
+orthogonal integration strategies for incorporating LLMs into
+sequential recommendation pipelines. Among these, the
+\textbf{LLM2Sequential} approach proved to be the most impactful
+and the most practically viable. Its core idea is embedding
+substitution: the item embedding matrix $\mathbf{E} \in
+\mathbb{R}^{n \times d}$ of an existing sequential model
+--- which is otherwise randomly initialized and learned
+purely from interaction data --- is instead initialized with
+dense semantic vectors extracted from a pretrained LLM.
+
+Formally, for each item $i \in \mathcal{I}$, a textual description
+$\delta(i)$ is constructed from the item's available metadata.
+This description is fed as input to a pretrained LLM encoder
+$\phi_{\text{LLM}} : \mathcal{V}^* \rightarrow \mathbb{R}^{d_{\text{LLM}}}$,
+where $\mathcal{V}^*$ denotes the space of token sequences and
+$d_{\text{LLM}}$ is the LLM's output embedding dimensionality.
+The resulting dense vector $\mathbf{z}_i = \phi_{\text{LLM}}(\delta(i))$
+is then projected to the model's target dimensionality $d$ via PCA,
+yielding the initialization vector $\mathbf{e}_i^{(0)}
+\in \mathbb{R}^d$. The downstream sequential model is subsequently
+trained normally, either keeping these vectors frozen (feature
+extraction mode) or fine-tuning them (warm-start mode).
+
+\textcite{boz2025improving} report that LLM2Sequential initialization
+improves NDCG@10 by 15--20\% on their benchmarks compared to
+randomly initialized BERT4Rec, providing compelling evidence that
+LLM-generated semantic embeddings are highly complementary to the
+temporal modeling capabilities of self-attention architectures.
+
+\subsection{The Unresolved Description Strategy Question}
+
+A fundamental limitation of the \textcite{boz2025improving} study is
+the absence of any systematic investigation into the description
+function $\delta(i)$. In their experiments, $\delta(i)$ defaults to
+the item's title string, with one dataset additionally including
+user-generated tags. This single-strategy design raises an important
+open question: \textbf{is the formulation of $\delta(i)$ a
+performance-critical design choice, or does any reasonable description
+yield essentially equivalent embeddings?}
+
+The question is theoretically non-trivial. On one hand, the BGE-M3
+encoder is trained on hundreds of millions of text pairs and has
+been shown to produce high-quality dense representations across a
+wide range of text styles and lengths; it might be argued that the
+encoder's robustness renders the exact formulation secondary.
+On the other hand, different formulations activate different
+aspects of the LLM's pretrained knowledge: a title activates
+name-level identity information, a category-enriched description
+activates taxonomic knowledge, a comparative profile activates
+relational knowledge about product similarity, and a user-centric
+narrative activates sentiment and preference-related representations.
+These different activation patterns may produce embeddings with
+fundamentally different geometric structures in the representation
+space, with direct consequences for the discriminative capacity of
+the resulting item embeddings.
+
+This unresolved question directly motivates the experimental
+design of Contribution 2.
+
+
+% ============================================================
+\section{The Complete LLM2Sequential Pipeline}
+\label{sec:pipeline}
+% ============================================================
+
+\subsection{Dataset: Amazon Beauty}
+
+All experiments in this chapter are conducted on the
+\textbf{Amazon Beauty} dataset, a widely used benchmark for
+sequential recommendation derived from Amazon product reviews
+\parencite{mcauley2015image}. The dataset covers the Beauty
+product category and provides user-item interaction sequences
+(implicit feedback from purchases and reviews), item titles,
+brand names, product categories, descriptions, pricing information,
+and co-purchase relationships.
+
+Following the standard preprocessing protocol of
+\textcite{kang2018self}, we apply a 5-core filter (retaining only
+users and items with at least 5 interactions), sort interactions
+chronologically per user, and adopt the \textbf{leave-one-out}
+evaluation protocol: the last item of each user's sequence is
+held out as the test target, the penultimate item as the validation
+target, and all preceding items form the training sequence.
+
+\subsection{Embedding Model: BGE-M3}
+
+We use \textbf{BGE-M3} (BAAI/bge-m3) as the LLM encoder
+$\phi_{\text{LLM}}$. BGE-M3 is a multilingual dense retrieval
+model developed by the Beijing Academy of Artificial Intelligence,
+capable of producing dense representations, sparse lexical
+representations, and multi-vector ColBERT-style representations
+from the same encoder \parencite{chen2024bgem3}. We extract only
+the dense vector output, which has dimensionality $d_{\text{LLM}}
+= 1024$.
+
+BGE-M3 is selected for three reasons. First, it represents the
+state of the art in general-purpose dense text embedding at the
+time of this study, achieving top performance on the MTEB
+benchmark. Second, its architecture as a bidirectional encoder
+--- in contrast to autoregressive LLMs --- is particularly suited
+for producing holistic item-level representations rather than
+next-token predictions. Third, its multilingual training corpus
+provides robustness to the heterogeneous and sometimes noisy
+product text found in the Amazon dataset.
+
+All items are encoded in a single offline pass using
+\texttt{fp16} precision on a GPU, exploiting BGE-M3's
+\texttt{FlagEmbedding} interface with a maximum input length
+of 128 tokens and a batch size of 512. The encoding of the full
+item catalog takes approximately 52--56 seconds per strategy,
+confirming that the approach is computationally viable.
+
+\subsection{PCA Dimensionality Reduction}
+
+The raw 1024-dimensional BGE-M3 embeddings are reduced to
+$d = 256$ dimensions using \textbf{Principal Component Analysis
+(PCA)}. A separate PCA transformation is fitted independently
+for each description strategy, ensuring that each strategy's
+embedding space is optimally compressed along its own principal
+directions. This design choice avoids conflating the geometric
+properties of different strategies under a shared projection.
+
+PCA is applied \textit{before} feeding the embeddings into
+SASRec, replicating the preprocessing protocol of the reference
+repository on which this work builds. The number of components
+$d = 256$ balances representational capacity with training
+efficiency, and is consistent with the downstream model's
+hidden dimension.
+
+\subsection{Downstream Model: LLM2SASRec}
+
+The downstream sequential model is \textbf{SASRec}
+\parencite{kang2018self} initialized with LLM-derived item
+embeddings --- a configuration we term \textbf{LLM2SASRec}.
+SASRec is selected as the downstream model for three reasons:
+its architectural simplicity allows the experimental results
+to be attributed cleanly to the quality of the item embeddings
+rather than to the sequential modeling architecture; it is one
+of the most widely adopted baselines in sequential recommendation
+research; and its unidirectional causal attention mechanism
+makes it well-suited to the leave-one-out next-item prediction
+evaluation setting.
+
+SASRec is configured uniformly across all strategies with
+the following hyperparameters: maximum sequence length $N = 50$,
+$L = 1$ Transformer block, $h = 2$ attention heads, embedding
+and hidden dimension $d = 256$, dropout rate $p = 0.5$,
+learning rate $\eta = 0.001$, weight decay $\lambda = 10^{-4}$,
+batch size 256, and early stopping with patience 10 epochs.
+The item embedding matrix is initialized from the
+strategy-specific PCA-reduced embeddings and fine-tuned during
+training.
+
+A \textbf{Vanilla SASRec} baseline --- identical architecture
+with randomly initialized (rather than LLM-initialized)
+item embeddings --- is trained and evaluated under the same
+conditions to quantify the absolute gain attributable to
+LLM embedding initialization, independently of description
+strategy.
+
+\subsection{Evaluation Protocol}
+
+All models are evaluated under the standard \textbf{leave-one-out}
+protocol using the full item set as the candidate pool (no negative
+sampling at test time). We report three complementary ranking
+metrics: \textbf{NDCG@10}, \textbf{HR@10}, and \textbf{MRR},
+following the definitions introduced in Section~1.6 of this memoir.
+NDCG@10 is the primary evaluation criterion, as it simultaneously
+captures whether the ground-truth item is retrieved and how highly
+it is ranked. HR@10 measures coverage at rank 10, and MRR
+emphasizes top-1 precision.
+
+The Vanilla SASRec baseline achieves NDCG@10 $= 0.0275$,
+HR@10 $= 0.0472$, and MRR $= 0.0229$. All LLM-initialized
+strategies are evaluated relative to this baseline to quantify
+the gain from semantic initialization, and relative to the
+Title-Only strategy (T1) to quantify the incremental gain
+from richer description formulations.
+
+
+% ============================================================
+\section{Item Description Strategies}
+\label{sec:strategies}
+% ============================================================
+
+This section formalizes the seven item description strategies
+evaluated in this work. For each item $i$ with metadata
+$\mathcal{M}(i)$ containing fields $\{\text{title},
+\text{brand}, \text{category}, \text{description},
+\text{price}, \text{also\_bought}\}$, we define a description
+function $\delta_k(i)$ for $k = 1, \ldots, 7$ that constructs
+the textual string passed to the BGE-M3 encoder.
+
+Let us define the following helper extractions from $\mathcal{M}(i)$:
+\begin{align*}
+  t(i) &= \text{item title (required field)}, \\
+  b(i) &= \text{brand name, or ``unknown'' if absent}, \\
+  c(i) &= \text{top-3 subcategories (excluding root category)}, \\
+  p(i) &= \text{price, or ``unknown'' if absent}, \\
+  \text{desc}(i) &= \text{product description text (first 200 chars)}, \\
+  R(i) &= \text{top-3 titles from the ``also\_bought'' co-purchase list}.
+\end{align*}
+
+\subsection{T1 --- Title Only (Baseline)}
+
+The simplest possible description strategy uses the item title
+as the sole input to the LLM encoder:
+\begin{equation}
+  \delta_1(i) = t(i).
+\end{equation}
+This strategy directly replicates the default approach of
+\textcite{boz2025improving} and serves as the reference
+baseline against which all richer formulations are compared.
+The title typically contains 3--10 tokens for beauty products
+(e.g., \textit{``L'Or\'eal Paris Elvive Total Repair 5 Shampoo''}),
+providing the LLM with identity-level information but none of
+the contextual signals that characterize the item's function,
+audience, or positioning relative to related products.
+
+\subsection{T2 --- Structured Attributes}
+
+The structured attributes strategy assembles the most factually
+informative metadata fields into a pipe-separated attribute list:
+\begin{equation}
+  \delta_2(i) = t(i)
+    \;\|\; \bigl[ \texttt{Brand: } b(i) \bigr]
+    \;\|\; \bigl[ \texttt{Category: } c(i) \bigr]
+    \;\|\; \bigl[ \texttt{Price: } p(i) \bigr],
+\end{equation}
+where $[\cdot]$ denotes optional inclusion (the field is
+appended only if it is non-missing), and $\|$ denotes the
+pipe character separator. An example description takes
+the form: \textit{``Moroccan Oil Treatment | Brand: OGX
+| Category: Hair Care, Serums, Treatments | Price: \$12.99''}.
+
+This strategy provides the LLM with structured taxonomic
+and commercial context. The pipe separator is chosen to
+signal to the encoder that the fields are independent
+attribute-value pairs rather than a flowing narrative,
+leveraging the LLM's exposure to structured product listings
+during pretraining.
+
+\subsection{T3 --- Rich Prose}
+
+The rich prose strategy constructs a natural language sentence
+that integrates the title, brand, category, and product
+description into a coherent narrative:
+\begin{equation}
+  \delta_3(i) =
+    t(i)
+    \;\text{by}\; b(i) \mathbf{,}
+    \;\text{a}\; c(i) \;\text{product.}\;
+    \text{desc}(i).
+\end{equation}
+An example: \textit{``OGX Moroccan Argan Oil Shampoo by OGX,
+a Hair Care, Moisturizing Shampoos product. Infused with argan
+oil to strengthen and smooth hair\ldots''}.
+
+This strategy is the most information-dense of the seven,
+incorporating the product description field which may contain
+detailed functional specifications. The hypothesis is that
+natural language integration reduces the structural ambiguity
+inherent in pipe-separated lists and more closely resembles
+the document-style text on which LLMs are pretrained.
+
+\subsection{T4 --- User-Centric}
+
+The user-centric strategy reformulates the item description
+from the perspective of the typical consumer, framing the
+item through the lens of user preference:
+\begin{equation}
+  \delta_4(i) = \texttt{``Users who like } t(i)
+    \;\texttt{enjoy: } c(i)
+    \;\texttt{products from } b(i)\texttt{''}.
+\end{equation}
+An example: \textit{``Users who like Moroccan Oil Treatment
+enjoy: Hair Care, Serums, Treatments products from OGX''}.
+
+This strategy attempts to encode the item's audience profile
+directly into the description, activating the LLM's knowledge
+of preference patterns and user communities rather than its
+knowledge of product properties. The hypothesis is that
+preference-aligned language may produce embeddings that are
+more closely aligned with the collaborative filtering signals
+that sequential models exploit.
+
+\subsection{T5 --- Comparative}
+
+The comparative strategy contextualizes the item within its
+neighborhood in the product graph by referencing co-purchased
+items:
+\begin{equation}
+  \delta_5(i) = t(i)
+    \;\texttt{is similar to: } R(i)
+    \texttt{. Appeals to fans of: } c(i).
+\end{equation}
+where $R(i)$ is the concatenation of up to three related
+product titles derived from the co-purchase graph.
+An example: \textit{``Moroccan Oil Treatment is similar to:
+Argan Oil Hair Mask, Coconut Oil Conditioner, Keratin Serum.
+Appeals to fans of: Hair Care, Serums, Treatments''}.
+
+This strategy encodes relational product knowledge that is
+directly aligned with the collaborative filtering objective:
+if two items are frequently co-purchased, their embeddings
+should be close in the representation space. By explicitly
+naming co-purchased products in the description, the strategy
+asks the LLM to activate relational semantic associations
+rather than purely categorical ones.
+
+\subsection{T6 --- Hybrid}
+
+The hybrid strategy combines the title with the two most
+informative structured fields (category and brand) in a
+compact pipe-separated format, explicitly omitting the
+product description and comparative fields:
+\begin{equation}
+  \delta_6(i) = t(i)
+    \;\|\; \texttt{Category: } c(i)
+    \;\|\; \texttt{Brand: } b(i).
+\end{equation}
+An example: \textit{``Moroccan Oil Treatment | Category:
+Hair Care, Serums | Brand: OGX''}.
+
+This strategy is designed as a concise hybrid that provides
+categorical and brand context without the verbosity of T3
+or the relational dependency on co-purchase data of T5.
+It was labeled as the ``best'' strategy in preliminary runs,
+motivating its inclusion as a distinct category.
+
+\subsection{T7 --- Structured Comparative}
+
+The structured comparative strategy combines the structured
+attribute format of T2 with the co-purchase similarity
+signal of T5:
+\begin{equation}
+  \delta_7(i) = t(i)
+    \;\|\; \texttt{Category: } c(i)
+    \;\|\; \texttt{Brand: } b(i)
+    \;\|\; \texttt{Similar to: } R_2(i),
+\end{equation}
+where $R_2(i)$ uses up to two related product titles to limit
+description length.
+
+This strategy tests whether the combination of structured
+metadata and comparative relational context is additive,
+or whether the two signals provide redundant information
+to the encoder. An example: \textit{``Moroccan Oil Treatment
+| Category: Hair Care, Serums | Brand: OGX | Similar to:
+Argan Oil Hair Mask, Coconut Oil Conditioner''}.
+
+\subsection{Summary of Strategy Design Space}
+
+Table~\ref{tab:strategies_summary} summarizes the design
+dimensions of the seven strategies.
+
+\begin{table}[ht]
+\centering
+\caption{Design dimensions of the seven description strategies}
+\label{tab:strategies_summary}
+\renewcommand{\arraystretch}{1.3}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{} l c c c c c @{}}
+\toprule
+\textbf{Strategy} & \textbf{Title} & \textbf{Brand} &
+\textbf{Category} & \textbf{Description} & \textbf{Co-purchase} \\
+\midrule
+T1: Title Only          & \checkmark & $\times$ & $\times$ & $\times$ & $\times$ \\
+T2: Structured Attrs    & \checkmark & \checkmark & \checkmark & $\times$ & $\times$ \\
+T3: Rich Prose          & \checkmark & \checkmark & \checkmark & \checkmark & $\times$ \\
+T4: User-Centric        & \checkmark & \checkmark & \checkmark & $\times$ & $\times$ \\
+T5: Comparative         & \checkmark & $\times$ & \checkmark & $\times$ & \checkmark \\
+T6: Hybrid              & \checkmark & \checkmark & \checkmark & $\times$ & $\times$ \\
+T7: Struct+Compare      & \checkmark & \checkmark & \checkmark & $\times$ & \checkmark \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+
+% ============================================================
+\section{Embedding Space Analysis}
+\label{sec:embedding_quality}
+% ============================================================
+
+Before examining downstream recommendation quality, we
+analyze two geometric properties of the raw 1024-dimensional
+BGE-M3 embeddings produced by each strategy: \textbf{isotropy}
+and \textbf{average pairwise cosine distance}. These
+intrinsic measures characterize the structure of the
+embedding space independently of any downstream model.
+
+\subsection{Isotropy}
+
+Embedding isotropy measures how uniformly distributed the
+embedding vectors are across all directions of the
+representation space \parencite{mu2018allbutthetop}. A
+perfectly isotropic embedding space uses every dimension
+equally, while an anisotropic space concentrates variance
+along a small number of principal directions, wasting
+representational capacity. Formally, isotropy is measured
+as the ratio of the smallest to the largest singular value
+of the centered embedding matrix:
+\begin{equation}
+  \text{Isotropy} = \frac{\sigma_{\min}}{\sigma_{\max}},
+\end{equation}
+where $\sigma_{\min}$ and $\sigma_{\max}$ are respectively
+the smallest and largest singular values of
+$\mathbf{Z} - \bar{\mathbf{z}}\mathbf{1}^\top$, with
+$\mathbf{Z} \in \mathbb{R}^{n \times d_{\text{LLM}}}$ the
+embedding matrix and $\bar{\mathbf{z}}$ the mean embedding.
+
+In our experiments, all seven strategies yield an isotropy
+score of approximately 0.0, indicating that the BGE-M3
+embeddings are highly anisotropic for the Beauty item catalog.
+This result is consistent with the well-documented
+\textbf{representation degeneration} phenomenon in contextual
+embedding models \parencite{li2020sentence, mu2018allbutthetop},
+where pretrained LLM embeddings concentrate in a narrow
+cone of the representation space. The dominant singular value
+is orders of magnitude larger than the smallest, reflecting
+that most semantic variation is captured by a small number
+of principal directions --- which is precisely why PCA
+reduction to 256 dimensions retains a large fraction of
+the total variance.
+
+\subsection{Average Pairwise Cosine Distance}
+
+Average pairwise cosine distance measures the typical
+dissimilarity between item embeddings, providing an estimate
+of how \textit{discriminative} the embedding space is:
+higher values indicate that the strategy produces more
+spread-out embeddings where different items are more
+easily separated. We estimate this quantity from a random
+sample of 2\,000 item pairs:
+\begin{equation}
+  \overline{d}_{\cos} =
+    1 - \frac{1}{\binom{2000}{2}}
+    \sum_{i \neq j} \cos(\mathbf{z}_i, \mathbf{z}_j).
+\end{equation}
+
+Table~\ref{tab:embedding_quality} reports the average
+pairwise cosine distance for each strategy.
+
+\begin{table}[ht]
+\centering
+\caption{Embedding space geometry: average pairwise cosine distance per strategy (higher = more discriminative)}
+\label{tab:embedding_quality}
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{@{} l c @{}}
+\toprule
+\textbf{Strategy} & \textbf{Avg.\ Pairwise Cosine Dist.} \\
+\midrule
+T1: Title Only (Baseline) & 0.5801 \\
+T2: Structured Attrs      & 0.4868 \\
+T3: Rich Prose            & 0.5273 \\
+T4: User-Centric          & 0.4229 \\
+T5: Comparative           & 0.4814 \\
+T6: Hybrid                & 0.5256 \\
+T7: Struct+Compare        & 0.5080 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A clear and somewhat counterintuitive pattern emerges from
+Table~\ref{tab:embedding_quality}: \textbf{T1 (Title Only)
+produces the most spread-out embedding space} ($\overline{d}_{\cos}
+= 0.5801$), while \textbf{T4 (User-Centric) produces the most
+compact space} ($\overline{d}_{\cos} = 0.4229$). The richer
+structured and comparative strategies (T2, T5, T7) cluster
+in the middle range 0.48--0.51.
+
+This pattern can be explained as follows. A bare item title
+is typically the most uniquely identifying text for a product:
+two beauty items with different names will produce maximally
+distinct title-only descriptions, activating very different
+regions of the LLM's embedding space. In contrast, the
+user-centric formulation \textit{``Users who like X enjoy:
+[category] products from [brand]''} introduces a common
+grammatical and semantic template across all items in the same
+category-brand combination, pulling their embeddings toward
+a shared semantic center. The comparative strategy (T5)
+shows a similar compaction effect due to the shared relational
+vocabulary (``is similar to'', ``appeals to fans of'').
+
+Crucially, this analysis reveals that \textbf{geometric
+discriminability of the embedding space is not a reliable
+proxy for downstream recommendation quality}: T1 has the
+highest pairwise distance yet ranks only as the reference
+baseline in NDCG@10, while T5 --- despite a notably
+lower pairwise distance of 0.4814 --- achieves the best
+recommendation performance. We interpret this as evidence
+that the relevant notion of discriminability for recommendation
+is not global spread across all item pairs, but rather
+local discriminability between items that are semantically
+distinct from the user's perspective --- a distinction
+that comparative and relational descriptions may capture
+more effectively.
+
+
+% ============================================================
+\section{Experimental Results and Analysis}
+\label{sec:promptcraft_results}
+% ============================================================
+
+\subsection{Main Results}
+
+Table~\ref{tab:promptcraft_main} reports the full experimental
+results for all seven description strategies and the Vanilla
+SASRec baseline on the Amazon Beauty dataset.
+
+\begin{table}[ht]
+\centering
+\caption{PromptCraft-SeqRec results on Amazon Beauty. All LLM-initialized strategies vs.\ Vanilla SASRec and T1 baseline. Best LLM result per metric in \textbf{bold}, second best \underline{underlined}.}
+\label{tab:promptcraft_main}
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{} l c c c c c c @{}}
+\toprule
+\textbf{Strategy} &
+\textbf{NDCG@10} & \textbf{NDCG@20} &
+\textbf{HR@10} & \textbf{HR@20} &
+\textbf{MRR} &
+\textbf{$\Delta$NDCG@10 vs T1} \\
+\midrule
+Vanilla SASRec (no LLM)   & 0.0275 & 0.0324 & 0.0472 & 0.0667 & 0.0229 & $-21.5\%$ \\
+\midrule
+T1: Title Only (Baseline) & 0.0351 & 0.0423 & 0.0642 & 0.0931 & 0.0281 & --- \\
+T2: Structured Attrs      & \underline{0.0359} & \underline{0.0438} & 0.0635 & \underline{0.0949} & \textbf{0.0297} & $+2.3\%$ \\
+T3: Rich Prose            & 0.0340 & 0.0411 & 0.0618 & 0.0902 & 0.0275 & $-3.0\%$ \\
+T4: User-Centric          & 0.0357 & 0.0433 & 0.0631 & 0.0935 & \underline{0.0294} & $+1.7\%$ \\
+T5: Comparative           & \textbf{0.0360} & \textbf{0.0438} & \underline{0.0658} & \textbf{0.0967} & 0.0291 & $+\mathbf{2.6\%}$ \\
+T6: Hybrid                & 0.0354 & 0.0427 & 0.0635 & 0.0926 & 0.0289 & $+0.8\%$ \\
+T7: Struct+Compare        & 0.0359 & 0.0432 & \textbf{0.0671} & \underline{0.0962} & 0.0285 & $+2.4\%$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{LLM Initialization vs.\ Vanilla SASRec}
+
+A first and unambiguous finding is that \textbf{all seven
+LLM-initialized strategies outperform the Vanilla SASRec
+baseline} (NDCG@10 $= 0.0275$) by a substantial margin.
+The gain ranges from $+23.6\%$ (T3 Rich Prose,
+NDCG@10 $= 0.0340$) to $+30.8\%$ (T5 Comparative,
+NDCG@10 $= 0.0360$), confirming the robustness of the
+LLM2Sequential initialization strategy across all
+description formulations. Even the weakest strategy (T3)
+yields a substantial absolute improvement, establishing
+that semantic LLM initialization is beneficial regardless
+of the description quality.
+
+This result is aligned with and replicates the findings of
+\textcite{boz2025improving} on a different dataset (Amazon
+Beauty vs.\ their MovieLens benchmarks), providing additional
+cross-domain evidence for the generalizability of the
+LLM2Sequential approach.
+
+\subsection{Impact of Description Strategy on NDCG@10}
+
+The central question of this chapter is whether the description
+formulation affects recommendation quality. The results in
+Table~\ref{tab:promptcraft_main} provide a clear affirmative
+answer: the gap between the best and worst LLM strategies
+(T5 vs.\ T3) amounts to $+5.9\%$ relative NDCG@10, a
+non-trivial difference that is larger than the gains typically
+reported by architectural innovations in the sequential
+recommendation literature.
+
+The ranking of strategies by NDCG@10 is as follows:
+\[
+  \text{T5} \approx \text{T2} \approx \text{T7} > \text{T4} > \text{T6} > \text{T1} \gg \text{T3}.
+\]
+The top three strategies (T5, T2, T7) all improve over the
+title-only baseline by approximately $+2.3\%$ to $+2.6\%$
+NDCG@10. T4 (User-Centric) provides a smaller but consistent
+$+1.7\%$ improvement. T6 (Hybrid) is marginally above the
+baseline ($+0.8\%$). T3 (Rich Prose) is the only strategy
+to degrade performance, falling $3.0\%$ below the title-only
+baseline.
+
+\subsection{Metric-Specific Analysis}
+
+The three metrics tell a slightly different story at the
+level of the top strategies:
+
+\begin{itemize}
+  \item \textbf{NDCG@10} (ranking quality): T5 Comparative
+        achieves the highest score (0.0360), closely followed
+        by T2 Structured and T7 Struct+Compare (0.0359).
+        T5's superiority on this position-sensitive metric
+        suggests that relational comparative descriptions
+        help the model rank the ground-truth item toward
+        the top of the list.
+  \item \textbf{HR@10} (coverage): T7 Struct+Compare
+        achieves the highest HR@10 (0.0671), followed by
+        T5 Comparative (0.0658). The combination of
+        structured attributes and co-purchase context
+        appears to maximize the probability that the correct
+        item appears anywhere in the top-10 list.
+  \item \textbf{MRR} (top-1 precision): T2 Structured Attrs
+        achieves the highest MRR (0.0297), indicating that
+        factual structured metadata is particularly effective
+        at pushing the ground-truth item to the very top
+        position of the ranking.
+\end{itemize}
+
+No single strategy dominates across all three metrics,
+suggesting that the optimal formulation depends on the
+specific recommendation objective. For applications where
+top-1 precision is critical (e.g., single-item recommendations),
+T2 structured attributes is recommended; for applications
+requiring maximum coverage (e.g., top-$K$ diversified lists),
+T7 or T5 are preferable.
+
+\subsection{Why Does T3 (Rich Prose) Underperform?}
+
+The underperformance of T3 is the most striking and
+counterintuitive finding of this study. T3 is the only
+strategy that incorporates the full product description
+text (up to 200 characters) and constructs a grammatically
+coherent prose narrative. One might expect this richest
+formulation to produce the best embeddings. Instead, it
+is the only strategy to fall below the title-only baseline.
+
+We attribute this to two complementary factors. First,
+product descriptions in the Amazon Beauty dataset are
+frequently \textbf{marketing copy} rather than informative
+factual content: they contain superlatives, promotional
+language, and generic claims (e.g., \textit{``transforms
+your hair''}, \textit{``leaves skin glowing''}) that
+provide the LLM with noisy, low-discriminative signals.
+The BGE-M3 encoder, trained primarily on informative text
+pairs, may actually perform worse when presented with
+ambiguous or hyperbolic input. Second, the 128-token
+maximum length of the BGE-M3 encoding window means that
+a significant portion of longer prose descriptions
+is \textbf{truncated}, potentially breaking sentence
+structure in a way that degrades embedding quality.
+
+\subsection{Why Does T5 (Comparative) Perform Best?}
+
+T5 achieves the best NDCG@10 by incorporating the
+co-purchase neighborhood of each item (``also bought''
+lists). We argue that this strategy is uniquely aligned
+with the sequential recommendation objective: \textbf{items
+that users frequently co-purchase are exactly the items
+that should be nearby in the recommendation model's
+embedding space}. By explicitly naming co-purchased
+products in the description, T5 asks the LLM to produce
+an embedding that is semantically adjacent to those products
+--- directly encoding the collaborative filtering signal
+into the embedding initialization before any training
+occurs. This pre-alignment may provide the downstream
+SASRec model with a warm-start embedding space that is
+already partially optimized for the recommendation task.
+
+
+% ============================================================
+\section{Summary and Key Findings}
+\label{sec:promptcraft_summary}
+% ============================================================
+
+This chapter presented a systematic investigation of seven
+item description strategies for LLM-based sequential
+recommendation, evaluated on the Amazon Beauty dataset using
+BGE-M3 embeddings and SASRec as the downstream model.
+The main findings are as follows.
+
+\medskip
+\noindent\textbf{Finding 1 --- LLM initialization is robustly beneficial.}
+All seven description strategies outperform the Vanilla
+SASRec baseline by $+23\%$ to $+31\%$ relative NDCG@10,
+confirming the generalizability of the LLM2Sequential
+approach across description formulations and datasets.
+
+\medskip
+\noindent\textbf{Finding 2 --- Description strategy is a
+performance-critical design choice.}
+The gap between the best (T5: $+2.6\%$) and worst (T3: $-3.0\%$)
+LLM strategies relative to the title-only baseline
+amounts to $5.9\%$ relative NDCG@10. This gap exceeds the
+gains typically reported by architectural modifications in
+the recommendation literature, establishing description
+strategy as a first-class design dimension in LLM-augmented
+recommendation systems.
+
+\medskip
+\noindent\textbf{Finding 3 --- Comparative descriptions best
+align with the recommendation objective.}
+T5 (Comparative) achieves the best NDCG@10 and T7
+(Struct+Compare) achieves the best HR@10, both leveraging
+co-purchase relationships. Incorporating relational
+product knowledge into the description directly pre-aligns
+the embedding space with the collaborative filtering
+signal exploited by the sequential model.
+
+\medskip
+\noindent\textbf{Finding 4 --- Geometric discriminability
+is not a reliable predictor of downstream quality.}
+T1 (Title Only) produces the most geometrically spread-out
+embeddings ($\overline{d}_{\cos} = 0.5801$) yet ranks only
+as the reference baseline. Global pairwise distance is a
+poor surrogate for recommendation-relevant discriminability.
+
+\medskip
+\noindent\textbf{Finding 5 --- Prose descriptions with noisy
+marketing text hurt performance.}
+T3 (Rich Prose) is the only strategy to degrade below the
+title-only baseline, underscoring the risk of incorporating
+unfiltered product description fields that contain
+marketing language rather than factually discriminative content.
+
+\begin{table}[ht]
+\centering
+\caption{Summary of strategy recommendations by objective}
+\label{tab:strategy_recommendations}
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabular}{@{} l l @{}}
+\toprule
+\textbf{Objective} & \textbf{Recommended Strategy} \\
+\midrule
+Maximize NDCG@10 (ranking quality)  & T5: Comparative \\
+Maximize HR@10 (coverage)            & T7: Struct+Compare \\
+Maximize MRR (top-1 precision)       & T2: Structured Attrs \\
+Minimal metadata (title+category only) & T6: Hybrid \\
+Avoid: noisy description fields      & T3: Rich Prose \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% ============================================================
+% GENERAL CONCLUSION
+% ============================================================
+\chapter*{General Conclusion}
+\addcontentsline{toc}{chapter}{General Conclusion}
+
+\section*{Summary of Contributions}
+
+This memoir presented two complementary contributions to the field of sequential recommendation.
+
+\medskip
+\noindent\textbf{Contribution 1 --- Length-Adaptive Hybrid GNN-Transformer.}
+We proposed a family of four hybrid architectures combining a BERT4Rec Transformer backbone with a complementary auxiliary encoder, unified by a length-adaptive fusion mechanism. The key insight is that the relative utility of global graph signals versus local sequential signals varies systematically with user interaction history length: sparse users benefit most from GNN-based global collaborative signals, while active users benefit from the full expressiveness of the Transformer. The four variants differ in their auxiliary encoder (GCN co-occurrence graph, dilated convolutions, or temporal graph) and fusion strategy (global learnable $\alpha$, per-user discrete $\alpha(u)$, or gated sigmoid). Evaluated on MovieLens-100K and MovieLens-1M, BERT-Hybrid-Fixed achieves the strongest aggregate performance on ML-1M (\(+8.1\%\) HR@10, \(+11.5\%\) NDCG@10, \(+14.2\%\) MRR@10 over BERT4Rec), while TGT-BERT4Rec achieves the highest HR@10 for short-history users. All four variants add only $+0.1$M parameters ($+5.9\%$) over BERT4Rec, confirming that the gains stem from architectural complementarity rather than increased capacity.
+
+\medskip
+\noindent\textbf{Contribution 2 --- Systematic Study of LLM Item Description Strategies.}
+We conducted the first systematic investigation of how the formulation of item textual descriptions affects the quality of LLM-generated embeddings in the context of sequential recommendation, following the LLM2Sequential framework of \textcite{boz2025improving}. Seven description strategies were designed and evaluated on the Amazon Beauty dataset using BGE-M3 embeddings and SASRec as the downstream model. The comparative strategy (T5) achieved the best NDCG@10 ($+2.6\%$ over the title-only baseline), while Rich Prose (T3) was the only strategy to hurt performance ($-3.0\%$). All LLM-initialized strategies outperformed Vanilla SASRec by $+23\%$ to $+31\%$ relative NDCG@10, and description strategy was shown to be a performance-critical design choice with a 5.9\% gap between best and worst formulations.
+
+\section*{Limitations}
+
+Several methodological limitations should be acknowledged. First, the asymmetric maximum sequence length (200 for hybrid models vs.\ 50 for pure sequential baselines) introduces a confound in the comparison; future work should control for uniform truncation. Second, the discrete bins in HybridDiscrete introduce hard boundary discontinuities and receive no gradient signal; a fully differentiable continuous fusion function would be a natural extension. Third, the evaluation is conducted exclusively on MovieLens benchmarks; generalization to other domains and interaction types remains to be validated.
+
+\section*{Future Directions}
+
+Several promising research directions emerge from this work. First, replacing the discrete length bins with a continuous MLP-based $\alpha(u)$ function trained end-to-end would eliminate boundary effects and allow the model to learn a smooth, data-driven fusion schedule. Second, extending the systematic study of LLM description strategies to more recent instruction-tuned models (GPT-4, LLaMA-3) and to non-movie domains (e-commerce, music) would broaden the practical impact. Third, combining both contributions --- length-adaptive hybrid fusion with LLM-enriched item embeddings --- represents a natural next step toward a unified architecture that leverages structural, temporal, and semantic item signals simultaneously.
+
+% ============================================================
+% BIBLIOGRAPHY
+% ============================================================
+\newpage
+\bibliography{references}
+
+\end{document}

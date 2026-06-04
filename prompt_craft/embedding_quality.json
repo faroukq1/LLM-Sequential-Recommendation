@@ -1,0 +1,30 @@
+{
+  "type1_title_only": {
+    "isotropy": 0.0,
+    "avg_pairwise_dist": 0.5801141433214964
+  },
+  "type2_structured": {
+    "isotropy": 0.0,
+    "avg_pairwise_dist": 0.4867717233832476
+  },
+  "type3_rich_prose": {
+    "isotropy": 0.0,
+    "avg_pairwise_dist": 0.5272927800673197
+  },
+  "type4_user_centric": {
+    "isotropy": 0.0,
+    "avg_pairwise_dist": 0.42289189413008765
+  },
+  "type5_comparative": {
+    "isotropy": 0.0,
+    "avg_pairwise_dist": 0.48135958575163107
+  },
+  "type6_hybrid": {
+    "isotropy": 0.0,
+    "avg_pairwise_dist": 0.525603066871833
+  },
+  "type7_structured_comparative": {
+    "isotropy": 0.0,
+    "avg_pairwise_dist": 0.5080018544577745
+  }
+}

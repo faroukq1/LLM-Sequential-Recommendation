@@ -18,7 +18,7 @@ class MeanReciprocalRank(RankingMetric):
 
         # Build top-k ratings where all irrelevant items are set to zero and all relevant to 1.
         intersect_mask = np.pad(
-            np.in1d(predictions, intersect, assume_unique=True).astype(np.int32),
+            np.isin(predictions, intersect, assume_unique=True).astype(np.int32),
             (0, self.top_k - len(predictions)),
         )
 

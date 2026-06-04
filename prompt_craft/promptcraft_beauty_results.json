@@ -1,0 +1,89 @@
+{
+  "type1_title_only": {
+    "metrics": {
+      "NDCG@10": 0.03506246586178444,
+      "HR@10": 0.06422018348623854,
+      "NDCG@20": 0.04226850304807111,
+      "HR@20": 0.09308570149921683,
+      "MRR": 0.028149409628927632
+    },
+    "elapsed_seconds": 56.2,
+    "embedding_csv": "/kaggle/working/promptcraft_beauty/embeddings/beauty_type1_title_only_pca256.csv"
+  },
+  "type2_structured": {
+    "metrics": {
+      "NDCG@10": 0.035868720762019114,
+      "HR@10": 0.06354889236965765,
+      "NDCG@20": 0.043775115369805453,
+      "HR@20": 0.09487581114343253,
+      "MRR": 0.02966542124408631
+    },
+    "elapsed_seconds": 52.3,
+    "embedding_csv": "/kaggle/working/promptcraft_beauty/embeddings/beauty_type2_structured_pca256.csv"
+  },
+  "type3_rich_prose": {
+    "metrics": {
+      "NDCG@10": 0.03399669500069367,
+      "HR@10": 0.061758782725441934,
+      "NDCG@20": 0.04108693011120959,
+      "HR@20": 0.0901767733273663,
+      "MRR": 0.02750636689836523
+    },
+    "elapsed_seconds": 52.0,
+    "embedding_csv": "/kaggle/working/promptcraft_beauty/embeddings/beauty_type3_rich_prose_pca256.csv"
+  },
+  "type4_user_centric": {
+    "metrics": {
+      "NDCG@10": 0.03565885996445971,
+      "HR@10": 0.06310136495860372,
+      "NDCG@20": 0.04331860893376216,
+      "HR@20": 0.09353322891027076,
+      "MRR": 0.029431567061798582
+    },
+    "elapsed_seconds": 52.1,
+    "embedding_csv": "/kaggle/working/promptcraft_beauty/embeddings/beauty_type4_user_centric_pca256.csv"
+  },
+  "type5_comparative": {
+    "metrics": {
+      "NDCG@10": 0.035979360193378176,
+      "HR@10": 0.06578652942492727,
+      "NDCG@20": 0.043776775100350426,
+      "HR@20": 0.09666592078764824,
+      "MRR": 0.029105672359932697
+    },
+    "elapsed_seconds": 51.8,
+    "embedding_csv": "/kaggle/working/promptcraft_beauty/embeddings/beauty_type5_comparative_pca256.csv"
+  },
+  "type6_hybrid": {
+    "metrics": {
+      "NDCG@10": 0.03535721621010261,
+      "HR@10": 0.06354889236965765,
+      "NDCG@20": 0.04273675678524542,
+      "HR@20": 0.0926381740881629,
+      "MRR": 0.02887452729105269
+    },
+    "elapsed_seconds": 52.1,
+    "embedding_csv": "/kaggle/working/promptcraft_beauty/embeddings/beauty_type6_hybrid_pca256.csv"
+  },
+  "vanilla_sasrec": {
+    "metrics": {
+      "NDCG@10": 0.027501089749527054,
+      "HR@10": 0.0472141418661893,
+      "NDCG@20": 0.0324203670652711,
+      "HR@20": 0.06668158424703513,
+      "MRR": 0.022872056717416944
+    },
+    "elapsed_seconds": 50.1
+  },
+  "type7_structured_comparative": {
+    "metrics": {
+      "NDCG@10": 0.03591187838764992,
+      "HR@10": 0.06712911165808906,
+      "NDCG@20": 0.04320471781112989,
+      "HR@20": 0.09621839337659431,
+      "MRR": 0.028536903964609582
+    },
+    "elapsed_seconds": 52.1,
+    "embedding_csv": "/kaggle/working/promptcraft_beauty/embeddings/beauty_type7_structured_comparative_pca256.csv"
+  }
+}
